@@ -18,7 +18,6 @@ if (!function_exists('e')) {
     }
 }
 
-// Aceleași funcții de hashing ca în login.php
 if (!function_exists('passwordAlgo')) {
     function passwordAlgo()
     {
@@ -48,10 +47,7 @@ if (!function_exists('hashPassword')) {
     }
 }
 
-/*
- * Tokenul vine fie din query string (când se dă clic pe linkul din email),
- * fie din câmpul hidden al formularului (când se trimite parola nouă).
- */
+
 $token = $_SERVER['REQUEST_METHOD'] === 'POST'
     ? ($_POST['token'] ?? '')
     : ($_GET['token'] ?? '');
@@ -101,7 +97,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $tokenValid) {
         }
 
         if (empty($errors)) {
-            // Setăm parola nouă și invalidăm tokenul (nu mai poate fi refolosit)
             $upd = $con->prepare(
                 "UPDATE " . DB_PREFIX . "user_details
                     SET password = ?, reset_token_hash = NULL, reset_token_expires_at = NULL
