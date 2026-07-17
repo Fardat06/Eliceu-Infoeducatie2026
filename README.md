@@ -1,6 +1,11 @@
 # Eliceu
+Ǝliceu transformă alegerea liceului dintr-un proces complicat și stresant într-o experiență simplă, intuitivă și adaptată fiecărui elev de clasa a VIII-a.
 
-Ǝliceu este o platformă educațională care ajută elevii să aleagă liceul potrivit pe baza mediilor, profilurilor și specializărilor disponibile în București (folosind (broșura de admitere)[http://www.ismb.edu.ro/documente/examene/admitere/2026_2027/BROSURA_ADMITERE_2026_1.pdf] și https://static.evaluare.edu.ro/2026/) . Platforma include un chatbot AI și un sistem de Machine Learning pentru estimarea șanselor de admitere.
+Concepută ca un adevărat „magazin de licee”, platforma reunește într-un singur loc toate liceele din București și le prezintă într-un format modern, ușor de explorat. Elevii pot răsfoi carduri, aplica filtre după profil, sector, specializare sau medie, pot compara opțiuni, salva liceele preferate și accesa pagini detaliate pentru a-și construi treptat propria listă de admitere.
+
+Elementul care diferențiază cu adevărat Ǝliceu este tehnologia din spate. Platforma integrează un predictor de admitere bazat pe Machine Learning, care analizează media și poziția elevului, alături de datele istorice ale specializărilor, pentru a estima șansele de admitere. În plus, utilizatorii au la dispoziție un test de orientare pentru identificarea profilului potrivit, o secțiune dedicată evenimentelor și noutăților, precum și alte instrumente interactive menite să îi ajute să ia decizii mai informate.
+
+Construită pe o arhitectură modernă și protejată prin măsuri solide de securitate, precum parole criptate, autentificare în doi pași și protecție împotriva atacurilor web uzuale, Ǝliceu este mai mult decât o bază de date cu licee. Este un ghid digital inteligent, creat pentru a-i oferi fiecărui elev claritate, încredere și control asupra uneia dintre cele mai importante alegeri pentru viitorul său.
 
 ## Scop
 Proiectul are scopul de a face procesul alegerii liceului mai simplu și mai accesibil pentru elevi.
