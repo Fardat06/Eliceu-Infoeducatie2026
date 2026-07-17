@@ -1,13 +1,8 @@
 <?php
-/*
- * import_admitere.php
- * Receives the rows parsed by pdftoexecl.php (JSON: { rows: [ {…15 fields…} ] })
- * and upserts them into home_admitere_2026 keyed on `codificare`.
- */
 header('Content-Type: application/json; charset=utf-8');
 
 global $con;
-include 'plugin/init.php';   // provides $con (PDO) and DB_PREFIX
+include 'plugin/init.php';   
 
 function respond($d, $c = 200) { http_response_code($c); echo json_encode($d); exit; }
 
@@ -18,7 +13,6 @@ if (!is_array($input) || empty($input['rows']) || !is_array($input['rows'])) {
 $rows  = $input['rows'];
 $table = DB_PREFIX . 'admitere_2026';
 
-// value cleaners
 $num = function ($v) {
     if ($v === '' || $v === null) return null;
     $v = str_replace(',', '.', (string) $v);
@@ -49,7 +43,7 @@ try {
 
     foreach ($rows as $r) {
         $cod = $str($r['codificare'] ?? '', 10);
-        if ($cod === '') { $skipped++; continue; }   // codificare is the unique key
+        if ($cod === '') { $skipped++; continue; }   
         $st->execute([
             $intOrNull($r['nr'] ?? null),
             $str($r['tip_scoala'] ?? '', 120),
