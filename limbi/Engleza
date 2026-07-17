@@ -1,0 +1,96 @@
+<?php
+//onkeypress="return isNumberKey(event)"
+function lang(string $phrase): string
+{
+    static $lang = array(
+        'FONTNAME'                             =>'helvetica',
+        'HIDDEN'                               =>'Hidden', 
+        'DIRECTION'                            =>'LTR',
+        'HOME'                                 =>'Home',
+        'DASHBOARD'                            =>'Dashboard',
+        'OVERVIEW'                             =>'Overview',
+        'High school'                          =>'High school',
+        'High School Type'                     =>'High School Type',
+        'Profile'                              =>'Profile',
+        'Specialization'                       =>'Specialization',
+        'Bilingual'                            =>'Bilingual',
+        'ADD NEW SCHOOL'                       =>'Add New School',
+        'ID'                                   => 'ID',
+        'SCHOOL NAME'                          =>'School Name' ,
+        'CITY'                                 =>'city' ,      
+        'ZONE'                                 =>'Zone' ,
+        'ADDRESS'                              =>'Address' ,
+        'PHOTO'                                =>'Photo' ,
+         "EDIT SCHOOL"                         =>'Edit School' ,
+
+
+
+
+        'ACTIVATE'                             =>'Activate',
+        'CATEGORIES'                           =>'Categories',  
+        'ITEMS'                                =>'Items',
+        'MEMBERS'                              =>'Members',
+        'COMMENTS'                             =>'Comments',  
+        'STATISTICS'                           =>'Statistics',
+        'LOGOUT'                               =>'Logout',
+        'LOGIN'                                =>'Login',
+        'EMAIL'                                =>'Email',
+        'PASSWORD'                             =>'Password',
+        'REMEMBER_ME'                          =>'Remember Me',
+        'CREATE_ACCOUNT'                       =>'Create Account',
+        'CREATE_NEW_ACCOUNT'                   =>'Create New Account',
+        'USERNAME'                             =>'Username',
+        'USERNAME_OR_EMAIL'                    =>'Username or Email',
+        'PASSWORD_AGAIN'                       =>'Password Again',
+        'FIRST_NAME'                           =>'First Name',
+        'LAST_NAME'                            =>'Last Name',
+        'FULL_NAME'                            =>'Full Name',
+        'USERNAME_TAKEN'                       =>'Sorry This Username Is Exist',        
+        'EMAIL_TAKEN'                          =>'Sorry This Email Is Exist',
+        'PASSWORD_NOT_MATCH'                   =>'Sorry Password Not Match',
+        'EMAIL_NOT_EXIST'                      =>'Sorry This Email Not Exist',
+        'LOGIN_SUCCESS'                       =>'Welcome Back',
+        'LOGIN_FAILED'                        =>'Sorry Login Failed',   
+        'USER_NOT_ACTIVATED'                  =>'Sorry This User Not Activated',    
+        'ADD'                                  =>'Add',
+        'EDIT'                                 =>'Edit',
+        'DELETE'                               =>'Delete',
+        'VIEW'                                 =>'View',
+        'ACTIVE'                               =>'Active',
+        'DEACTIVE'                             =>'Deactive',
+        'APPROVE'                              =>'Approve',
+        'CANCEL'                               =>'Cancel',
+        'BACK'                                 =>'Back',
+        'UPDATE'                               =>'Update',
+        'INSERT'                               =>'Insert',
+        'SUCCESS'                              =>'Success',
+        'ERROR'                                =>'Error',
+        'NUMBER'                               =>'Number',
+        'NAME'                                 =>'Name',    
+
+        'DESCRIPTION'                          =>'Description',
+        'IMAGE'                                =>'Image',
+        'STATUS'                               =>'Status',
+        'CATEGORY_NAME'                        =>'Category Name',
+        'CATEGORY_IMAGE'                       =>'Category Image',
+        'CATEGORY_DESCRIPTION'                 =>'Category Description',
+        'CATEGORY_STATUS'                      =>'Category Status',
+        'CATEGORY_ADD_SUCCESS'                 =>'Category Added Successfully',
+        'CATEGORY_ADD_ERROR'                   =>'Sorry Category Not Added',
+        'CATEGORY_UPDATE_SUCCESS'              =>'Category Updated Successfully',
+        'CATEGORY_UPDATE_ERROR'                =>'Sorry Category Not Updated',
+        'CATEGORY_DELETE_SUCCESS'              =>'Category Deleted Successfully',       
+        'CATEGORY_DELETE_ERROR'                =>'Sorry Category Not Deleted',
+        'TABLE'                                =>'Table',
+    
+
+
+
+
+
+
+
+
+        );   
+    return isset($lang[$phrase]) ? $lang[$phrase] : $phrase;
+}
