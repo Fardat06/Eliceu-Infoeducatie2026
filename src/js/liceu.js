@@ -1,4 +1,4 @@
-// ─── SIDEBAR ─────────────────────────────────────────────────────────────
+
 const menuBtn = document.getElementById("menuBtn");
 const sidebar = document.getElementById("sidebar");
 const closeBtn = document.getElementById("closeBtn");
@@ -40,7 +40,6 @@ if (closeBtn && sidebar) {
       }
     }
   });
-// --- Compare --------------------------------------------------
 const compareGoBtn = document.getElementById("compareGoBtn");
 if (compareGoBtn) {
   compareGoBtn.addEventListener("click", () => {
@@ -61,7 +60,6 @@ if (compareGoBtnLista) {
   });
 }
 
-// ─── VIEW MODE ───────────────────────────────────────────────────────────
 function restoreView() {
   const savedView = localStorage.getItem("viewMode") || "grid";
   const grid = document.getElementById("productsGrid");
@@ -101,8 +99,7 @@ if (gridViewBtn) {
   });
 }
 
-// ─── LICEUY.PHP — filterForm_y + paginationy.php ───────────────────────────
-const form = document.getElementById("filterForm_y"); // ← fix: filterForm not filterFormx
+const form = document.getElementById("filterForm_y"); 
 
 function loadResults() {
   const formData = new FormData(form);
@@ -111,7 +108,6 @@ function loadResults() {
   const sortEl = document.getElementById("sortSelect");
   if (sortEl) params.set("sort", sortEl.value);
   
-  // Change the window location to the new parameters, forcing a page refresh
   window.location.search = params.toString();
 }
 
@@ -121,13 +117,10 @@ if (form) form.addEventListener("change", loadResults);
 const sortSelect = document.getElementById("sortSelect");
 if (sortSelect) {
   sortSelect.addEventListener("change", function () {
-    // 1. Get current URL parameters
     const params = new URLSearchParams(window.location.search);
     
-    // 2. Update the 'sort' parameter with the selected value
     params.set("sort", this.value);
     
-    // 3. Change the window location, which automatically refreshes the page
     window.location.search = params.toString();
   });
 }
@@ -140,7 +133,6 @@ if (searchBtn) {
     window.location.search = params.toString();
   });
 }
-// ─── LICEUX.PHP — filterForm_x + paginationx.php ─────────────────────────
 const formx = document.getElementById("filterForm_x");
 
 
@@ -150,8 +142,6 @@ function loadResults_x() {
   
   const sortEl = document.getElementById("sortSelect");
   if (sortEl) params.set("sort", sortEl.value);
-  
-  // Change the window location to the new parameters, forcing a page refresh
   window.location.search = params.toString();
 }
 
@@ -192,7 +182,6 @@ if (clearFilterss) {
 }
 
 
-// ─── SEARCH ENTER KEY ────────────────────────────────────────────────────
 const searchInput = document.getElementById("searchInput");
 if (searchInput) {
   searchInput.addEventListener("keydown", function (e) {
@@ -206,7 +195,6 @@ if (searchInput) {
   });
 }
 
-// ─── CLEAR FILTERS ───────────────────────────────────────────────────────
 const clearFilters = document.getElementById("clearFilters");
 if (clearFilters) {
   clearFilters.addEventListener("click", function () {
@@ -214,11 +202,7 @@ if (clearFilters) {
   });
 }
 
-// ─── COMPARE ─────────────────────────────────────────────────────────────
 
-// Reads the school name off the card so it can be cached in localStorage
-// alongside the id (cards from other pages aren't in the DOM, so the id
-// alone isn't enough to recover the name later, e.g. on page 2).
 function getSchoolNameFor(elem) {
   const card = elem.closest(".product-card");
   const t = card && card.querySelector(".card-title");
@@ -252,7 +236,6 @@ function checkNr(id) {
   if (elem.classList.contains("green")) {
     elem.classList.remove("green");
     elem.classList.add("red");
-    // remove from localStorage
     let saved = JSON.parse(localStorage.getItem("compareIds") || "[]");
     saved = saved.filter((item) => item !== id);
     localStorage.setItem("compareIds", JSON.stringify(saved));
@@ -266,7 +249,6 @@ function checkNr(id) {
   ) {
     elem.classList.remove("red");
     elem.classList.add("green");
-    // add to localStorage
     let saved = JSON.parse(localStorage.getItem("compareIds") || "[]");
     if (!saved.includes(id)) saved.push(id);
     localStorage.setItem("compareIds", JSON.stringify(saved));
@@ -301,7 +283,6 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   });
 });
-// ─── My List ─────────────────────────────────────────────────────────────
 
 function checkNrLista_x(id) {
     var elem  = document.getElementById(id),
@@ -333,7 +314,6 @@ fetch("plugin/add_list.php?id="+elem.id.replace('_lista', '')+"&name=general", {
 
 }
 
-// ─── My List ─────────────────────────────────────────────────────────────
 
 function checkNrLista_y(id) {
     var elem  = document.getElementById(id),
@@ -367,8 +347,6 @@ fetch("plugin/add_list.php?id="+elem.id.replace('_lista', '')+"&name=specializar
 
 }
 
-
-// ─── MOBILE FILTER DRAWER ────────────────────────────────────────────────
 (function () {
   const mobileFilterBtn = document.getElementById("mobileFilterBtn");
   const filterDrawer = document.getElementById("filterDrawer");
@@ -378,19 +356,15 @@ fetch("plugin/add_list.php?id="+elem.id.replace('_lista', '')+"&name=specializar
 
   if (!mobileFilterBtn || !filterDrawer) return;
 
-  // Clone the desktop filter sidebar into the drawer panel (if not already done)
   function populateDrawer() {
     const sidebar = document.getElementById("filterSidebar");
     if (!sidebar) return;
-    // Only clone once
     if (drawerPanel.querySelector(".filter-sidebar")) return;
     const clone = sidebar.cloneNode(true);
     clone.style.display = "flex";
     clone.style.width = "100%";
-    // Sync any checked state already in sidebar
     drawerPanel.appendChild(clone);
 
-    // Mirror changes from drawer checkboxes back to the real form
     clone.querySelectorAll("input[type='checkbox']").forEach((cb) => {
       cb.addEventListener("change", () => {
         const name = cb.getAttribute("name");
@@ -400,14 +374,12 @@ fetch("plugin/add_list.php?id="+elem.id.replace('_lista', '')+"&name=specializar
         );
         if (real) {
           real.checked = cb.checked;
-          // Trigger the form's change listener
           const event = new Event("change", { bubbles: true });
           real.dispatchEvent(event);
         }
       });
     });
 
-    // Wire up collapse/expand inside drawer
     clone.querySelectorAll(".filter-toggle").forEach((toggle) => {
       toggle.addEventListener("click", function () {
         const options =
@@ -434,11 +406,9 @@ fetch("plugin/add_list.php?id="+elem.id.replace('_lista', '')+"&name=specializar
   if (drawerClose) drawerClose.addEventListener("click", closeDrawer);
 })();
 
-// ─── DOM READY ───────────────────────────────────────────────────────────
 document.addEventListener("DOMContentLoaded", function () {
   restoreView();
 
-  // Filter card collapse/expand
   document.querySelectorAll(".filter-toggle").forEach((toggle) => {
     toggle.addEventListener("click", function () {
       const options =
@@ -448,7 +418,6 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   });
 
-  // Multi-select mousedown fix
   document.querySelectorAll("#subjects option").forEach((option) => {
     option.addEventListener("mousedown", function (e) {
       e.preventDefault();
