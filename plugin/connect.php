@@ -15,7 +15,6 @@
         global $con;
         $con = new PDO($dsn, $user, $pass,$option);
         $con->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        // ECHO 'You Are Connected';
     }
     catch (PDOException $e){
         echo'Failed To Connect' . $e->getMessage();
