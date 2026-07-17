@@ -27,7 +27,6 @@ ob_start();
 </head>
 <body class="<?= $_SESSION['pagename']  ?>" >
 
-  <!-- HEADER -->
   <header>
     <div class="logo-area">
       <button class="menu" id="menuBtn">☰</button>
@@ -45,7 +44,6 @@ ob_start();
     </nav>
   </header>
 
-  <!-- SIDEBAR -->
   <div class="sidebar" id="sidebar">
     <button class="close-btn" id="closeBtn">✕</button>
     <a href="index.php">Acasă</a>
