@@ -5,7 +5,6 @@ session_start();
 
 global $con;
 
-// Dacă e deja logat, nu are ce căuta aici
 if (isset($_SESSION['username'])) {
     header('Location: index.php');
     exit;
@@ -13,7 +12,6 @@ if (isset($_SESSION['username'])) {
 
 include 'plugin/init.php';
 
-// CSRF token (unul per sesiune, la fel ca în login.php)
 if (empty($_SESSION['csrf_token'])) {
     $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
 }
@@ -51,15 +49,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $stmt->execute([$email]);
             $row = $stmt->fetch();
 
-            /*
-             * Dacă utilizatorul există, generăm tokenul și trimitem mailul.
-             * Dacă NU există, nu spunem nimic diferit — altfel oricine ar putea
-             * afla ce emailuri au cont pe site (user enumeration).
-             */
             if ($row) {
-                $resetToken = bin2hex(random_bytes(32));           // merge în email, în clar
-                $resetHash  = hash('sha256', $resetToken);          // se salvează în DB
-                $expiresAt  = date('Y-m-d H:i:s', time() + 3600);   // valabil 1 oră
+                $resetToken = bin2hex(random_bytes(32));        
+                $resetHash  = hash('sha256', $resetToken);          
+                $expiresAt  = date('Y-m-d H:i:s', time() + 3600);   
 
                 $upd = $con->prepare(
                     "UPDATE " . DB_PREFIX . "user_details
