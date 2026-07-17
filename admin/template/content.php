@@ -1,7 +1,5 @@
         <div class="dashboard-content">
-          <!-- Overview View -->
           <div class="dashboard-view active" id="overview">
-            <!-- Stats Cards -->
             <div class="stats-grid">
               <div class="stat-card">
                 <div class="stat-card-header">
@@ -56,7 +54,6 @@
                 </div>
               </div>
             </div>
-            <!-- Charts -->
             <div class="chart-grid">
               <div class="chart-card">
                 <div class="chart-card-header">
@@ -77,7 +74,6 @@
                 </div>
               </div>
             </div>
-            <!-- Recent Activity -->
             <div class="dashboard-table-container">
               <div class="dashboard-table-header">
                 <h3 class="dashboard-table-title">Recent Projects</h3>
@@ -145,7 +141,6 @@
               </table>
             </div>
           </div>
-          <!-- Projects View -->
           <div class="dashboard-view" id="projects">
             <div class="empty-state">
               <div class="empty-state-icon">
@@ -155,7 +150,6 @@
               <p class="empty-state-description">Manage your projects here. Create new projects, track progress, and collaborate with your team.</p>
             </div>
           </div>
-          <!-- Tasks View -->
           <div class="dashboard-view" id="tasks">
             <div class="empty-state">
               <div class="empty-state-icon">
@@ -165,7 +159,6 @@
               <p class="empty-state-description">View and manage all your tasks. Create new tasks, set priorities, and track completion status.</p>
             </div>
           </div>
-          <!-- Reports View -->
           <div class="dashboard-view" id="reports">
             <div class="empty-state">
               <div class="empty-state-icon">
@@ -175,7 +168,6 @@
               <p class="empty-state-description">Generate detailed reports and analytics. View project performance, team productivity, and time tracking data.</p>
             </div>
           </div>
-          <!-- Settings View -->
           <div class="dashboard-view" id="settings">
             <div class="empty-state">
               <div class="empty-state-icon">
