@@ -1,18 +1,11 @@
 <?php
-// Output buffering start
 include_once 'plugin/function.php';
-//   ob_start("sanitize_output"); // Output buffering start
+//   ob_start("sanitize_output"); 
 ob_start(); 
 
  
 $pageTitle1 = 'High school';
-/*
-include 'plugin/init.php';
-global $con;
-global $pageTitle1;
-global $stmt1;
-global $rows;
-*/
+
 unset($_SESSION['pagename']);
 unset($_SESSION['stylecss']);
 $_SESSION['stylecss']  = 'style.css';
