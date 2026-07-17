@@ -1,7 +1,7 @@
 <?php
 include 'plugin/function.php';
-//   ob_start("sanitize_output"); // Output buffering start
-ob_start(); // Output buffering start
+//   ob_start("sanitize_output"); 
+ob_start(); 
 $pageTitle1 = 'High school';
 include 'plugin/init.php';
 global $con;
@@ -94,7 +94,6 @@ if (isset($_GET['ids'])) {
     <div class="compare-container">
 
 
-        <!-- TABLE -->
         <div id="compareTableWrap" class="compare-table-wrap">
             <table class="compare-table">
                 <thead>
