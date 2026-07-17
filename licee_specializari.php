@@ -13,11 +13,6 @@ unset($_SESSION['stylecss']);
 $_SESSION['stylecss'] = 'liceu.css';
 $_SESSION['pagename'] = '';
 
-/* --------------------------------------------------------------
- * Mobile helper — filter-count badge on the FAB.
- * Uses function_exists guard so it doesn't collide with the
- * same helper defined in licee_general.php (both may include).
- * -------------------------------------------------------------- */
 if (!function_exists('count_active_filters')) {
     function count_active_filters() {
         $n = 0;
@@ -35,13 +30,10 @@ $active_filter_count = count_active_filters();
 
 include 'template/header.php';
 ?>
-<!-- Mobile overlay stylesheet — shared with licee_general.php.
-     Adjust the path if your CSS folder differs. -->
 <link rel="stylesheet" href="src/css/licee_general_mobile.css">
 
 <div class="overlay" id="overlay"></div>
 
-<!-- MOBILE FILTER DRAWER -->
 <div class="filter-drawer" id="filterDrawer">
   <div class="filter-drawer-backdrop" id="drawerBackdrop"></div>
   <div class="filter-drawer-panel" id="drawerPanel">
@@ -52,10 +44,8 @@ include 'template/header.php';
   </div>
 </div>
 
-<!-- TOAST -->
 <div class="toast" id="toast">✓ Adăugat la lista ta!</div>
 
-<!-- PAGE -->
 <div class="page-wrapper">
   <div class="breadcrumb">
     <a href="index.php">Acasă</a>
@@ -93,7 +83,6 @@ include 'template/header.php';
   </div>
 
   <div class="shop-main">
-    <!-- FILTER SIDEBAR (desktop; hidden on mobile via existing @media rule in liceu.css) -->
     <form id="filterForm_y">
       <aside class="filter-sidebar" id="filterSidebar">
         <?php $selected_ptofiles = $_GET['profil'] ?? []; ?>
@@ -223,7 +212,6 @@ include 'template/header.php';
       </aside>
     </form>
 
-    <!-- GRID AREA -->
     <div class="grid-area">
       <div class="active-filters" id="activePills"></div>
 
