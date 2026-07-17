@@ -552,7 +552,7 @@ $_SESSION['pagename']  = 'page-home';
     </div>
     <nav>
       <?php if (!isset($_SESSION['ID'])){ ?>
-      <a href="login.php">Conttul meu</a>
+      <a href="login.php">Contul meu</a>
       <?php }else{ ?>
       <a href="licee_general_lista.php">General</a>
       <a href="licee_specializari_lista.php">Specializari</a>
