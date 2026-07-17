@@ -1,7 +1,7 @@
 <?php
 include 'plugin/function.php';
-//   ob_start("sanitize_output"); // Output buffering start
-ob_start(); // Output buffering start
+//   ob_start("sanitize_output"); 
+ob_start(); 
 $pageTitle1 = 'High school';
 include 'plugin/init.php';
 global $con;
@@ -66,7 +66,6 @@ if (isset($_GET['ids'])) {
 //echo print_r($row);
 
 ?>
-<!-- Mobile overlay stylesheet (shared with compare_general.php). -->
 <link rel="stylesheet" href="src/css/compare_mobile.css">
 
 <div class="overlay" id="overlay"></div>
@@ -94,7 +93,6 @@ if (isset($_GET['ids'])) {
     <div class="compare-container">
 
 
-        <!-- TABLE -->
         <div id="compareTableWrap" class="compare-table-wrap">
             <table class="compare-table">
                 <thead>
@@ -164,7 +162,7 @@ if (isset($_GET['ids'])) {
                 </div>
 
             </td>
-            <!--<td class="data-cell" style="color:var(--text-muted);font-size:20px;">â€”</td>-->
+           
             <?php if ($i+1 == $rows ) {
                 echo '</tr><tr><td class="row-label">Sector</td>';
             }
@@ -210,7 +208,6 @@ if (isset($_GET['ids'])) {
 
         for ($i = 0; $i < $rows; $i++) { ?>
             <td class="data-cell">1</td>
-            <!--<td class="data-cell" style="color:var(--text-muted);font-size:20px;">â€”</td>-->
             <?php if ($i+1 == $rows ) {
                 echo '</tr><tr class="section-divider"><td colspan="6">Contact</td></tr><tr><td class="row-label">Adresă</td>';
             }
@@ -230,7 +227,6 @@ if (isset($_GET['ids'])) {
         for ($i = 0; $i < $rows; $i++) { ?>
         <td class="data-cell"><a href="<?= $row[$i][21] ?>" target="_blank"
                 style="color:var(--purple);font-size:12px;font-weight:700"><?= $row[$i][2] ?></a></td>
-        <!--<<td class="data-cell">â€”</td>-->
         <?php if ($i+1 == $rows ) {
             echo '</tr><tr class="cta-row">
                         <td style="background:#faf8fc;border-right:1px solid var(--border);padding:20px;font-size:12px;font-weight:700;color:var(--text-muted)"> Vezi pagina completă</td>';
@@ -240,7 +236,6 @@ if (isset($_GET['ids'])) {
 
         for ($i = 0; $i < $rows; $i++) { ?>
         <td><a target="_blank" href="liceu_page.php?id=<?= $row[$i][0] ?>" class="view-btn">Vezi liceu</a></td>
-        <!--<<td class="data-cell">â€”</td>-->
         <?php if ($i+1 == $rows ) {
             echo '</tr>';
         }
@@ -254,10 +249,7 @@ if (isset($_GET['ids'])) {
 </div>
 </div>
 
-
 </div>
-
-
 
 <?php
 
