@@ -1,5 +1,4 @@
         <header class="dashboard-header">
-          <!-- Header Content -->
           <div class="dashboard-header-content">
             <button class="dashboard-sidebar-toggle">
               <span class="material-symbols-rounded">menu</span>
