@@ -9,8 +9,6 @@ global $pageTitle1;
 global $stmt1;
 global $rows;
 
-/* Explicit CSS base — was missing before, previous page's setting leaked in.
-   Mobile overlay is linked right after the header include below. */
 $_SESSION['stylecss'] = 'liceu.css';
 
 include 'template/header.php';
@@ -40,7 +38,6 @@ $id = $_GET['id'];
           $stmt4->execute(array($s_name));
           $row4 = $stmt4->fetchAll();
 
-// ---------- RECENZII (user reviews) ----------
 function stars_html($n) {
     $n = (int) round($n);
     $out = '';
@@ -56,7 +53,6 @@ if (empty($_SESSION['csrf_token'])) {
 
 $reviewError = '';
 
-// Handle a submitted review (logged-in users only)
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_review'])) {
     if (!isset($_SESSION['ID'])) {
         $reviewError = 'Trebuie să fii autentificat pentru a lăsa o recenzie.';
@@ -91,7 +87,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_review'])) {
     }
 }
 
-// Read all reviews for this school
 $revStmt = $con->prepare("SELECT r.rating, r.comment, r.created_at, u.first_name, u.username
                           FROM " . DB_PREFIX . "review r
                           JOIN " . DB_PREFIX . "user_details u ON r.user_id = u.id
@@ -102,7 +97,6 @@ $reviews  = $revStmt->fetchAll();
 $revCount = count($reviews);
 $revAvg   = $revCount ? array_sum(array_column($reviews, 'rating')) / $revCount : 0;
 
-// Has the current user already reviewed this school?
 $userHasReviewed = false;
 if (isset($_SESSION['ID'])) {
     $chk2 = $con->prepare("SELECT 1 FROM " . DB_PREFIX . "review
@@ -112,7 +106,6 @@ if (isset($_SESSION['ID'])) {
 }
 
 ?>
-<!-- Mobile overlay stylesheet. Adjust path if your CSS folder differs. -->
 <link rel="stylesheet" href="src/css/liceu_page_mobile.css">
 
 <div class="overlay" id="overlay"></div>
@@ -121,7 +114,6 @@ if (isset($_SESSION['ID'])) {
 
 <div class="page-wrapper">
 
-  <!-- BREADCRUMB -->
   <div class="breadcrumb">
     <a href="index.php">Acasă</a>
     <span>›</span>
@@ -132,7 +124,6 @@ if (isset($_SESSION['ID'])) {
 
   <div class="product-main">
 
-    <!-- HERO: gallery + info -->
     <div class="product-top">
 
       <div class="gallery-col fade-in">
@@ -177,10 +168,8 @@ if (isset($_SESSION['ID'])) {
       </div>
     </div>
 
-    <!-- BOTTOM: specs left, admitere right -->
     <div class="bottom-grid">
 
-      <!-- SPECIFICAȚII -->
       <div class="section-block fade-in fade-in-2">
         <div class="section-header">
           <h2>Specificații</h2>
@@ -230,7 +219,6 @@ if (isset($_SESSION['ID'])) {
         </div>
       </div>
 
-      <!-- ISTORICUL ADMITERII -->
       <div class="section-block fade-in fade-in-3">
         <div class="section-header">
           <h2>Istoricul Admiterii</h2>
@@ -242,7 +230,6 @@ if (isset($_SESSION['ID'])) {
             <button class="adm-tab" onclick="switchTab('pozitii',this)">Arhivă poziții</button>
           </div>
 
-          <!-- MEDII -->
           <div id="tab-medii">
             <p style="font-size:13px;font-weight:600;color:var(--text-muted);margin-bottom:14px;">Ultima medie acceptată pe specializare și an</p>
             <div class="admitere-table-wrap">
@@ -280,7 +267,6 @@ if (isset($_SESSION['ID'])) {
 
           </div>
 
-          <!-- POZITII -->
           <div id="tab-pozitii" style="display:none;">
             <p style="font-size:13px;font-weight:600;color:var(--text-muted);margin-bottom:14px;">Locul în ierarhia din București al ultimului elev admis pe fiecare specializare</p>
             <div class="admitere-table-wrap">
@@ -318,9 +304,8 @@ if (isset($_SESSION['ID'])) {
         </div>
       </div>
 
-    </div><!-- /bottom-grid -->
+    </div>
 
-    <!-- RECENZII -->
     <div class="section-block fade-in" id="reviews" style="margin-top:24px;">
       <div class="section-header">
         <h2>Recenzii</h2>
