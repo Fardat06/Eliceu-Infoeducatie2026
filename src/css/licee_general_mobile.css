@@ -1,0 +1,868 @@
+/* ============================================================
+   licee_general_mobile.css  (v3)
+   Mobile-only redesign for licee_general.php.
+
+   RULE: never touches desktop CSS. Everything is inside
+   @media (max-width: 680px). Load AFTER liceu.css.
+   ============================================================ */
+
+@media (max-width: 680px) {
+
+  /* ─── PAGE FRAME ─── */
+  .page-wrapper {
+    padding: 60px 0 90px;              /* leave room for sticky compare bar */
+    background: #f7f3fb;
+  }
+  .breadcrumb {
+    padding: 10px 16px;
+    font-size: 12px;
+    color: var(--text-muted);
+  }
+  .breadcrumb a { color: var(--purple-dark); text-decoration: none; }
+
+  /* ─── BANNER: curved-bottom, decorative blob ─── */
+  .shop-banner {
+    position: relative;
+    margin: 0 12px;
+    padding: 22px 20px 26px !important;
+    background: linear-gradient(135deg, #9661b8 0%, #7a4d99 100%);
+    border-radius: 20px 20px 32px 32px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(122, 77, 153, 0.28);
+  }
+  .shop-banner::before {
+    content: '';
+    position: absolute;
+    top: -40px; right: -40px;
+    width: 140px; height: 140px;
+    background: radial-gradient(circle, rgba(255, 227, 77, 0.4), transparent 70%);
+    border-radius: 50%;
+    display: block !important;
+    pointer-events: none;
+  }
+  .shop-banner::after {
+    content: '';
+    position: absolute;
+    bottom: -60px; left: -30px;
+    width: 160px; height: 160px;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.14), transparent 70%);
+    border-radius: 50%;
+    display: block !important;
+    pointer-events: none;
+  }
+  .shop-banner > div:first-child { position: relative; z-index: 1; }
+  .shop-banner h1 {
+    font-size: 20px !important;
+    font-weight: 800;
+    line-height: 1.2;
+    margin-bottom: 6px;
+    letter-spacing: -0.3px;
+  }
+  .shop-banner p { font-size: 12.5px !important; opacity: 0.92; }
+  .banner-badge {
+    position: relative;
+    z-index: 1;
+    background: rgba(255, 255, 255, 0.18);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    color: #fff;
+    padding: 6px 14px !important;
+    border-radius: 999px;
+    font-size: 11.5px !important;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+    align-self: flex-start;
+    border: 1px solid rgba(255, 255, 255, 0.28);
+  }
+
+  /* ─── SEARCH BAR: sticky, glassy, compact ─── */
+  .search-bar-wrap {
+    position: sticky;
+    top: 60px;
+    z-index: 40;
+    margin: 12px 12px 0;
+    padding: 10px 12px !important;
+    background: rgba(255, 255, 255, 0.90);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-radius: 14px;
+    box-shadow: 0 4px 14px rgba(150, 97, 184, 0.12);
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    gap: 8px !important;
+  }
+  .search-input-wrap { flex: 1 1 auto !important; order: 1 !important; min-width: 0; }
+  .search-input {
+    height: 40px !important;
+    border-radius: 10px !important;
+    font-size: 13.5px !important;
+    padding-left: 34px !important;
+  }
+  .search-btn {
+    order: 2 !important;
+    flex: 0 0 auto !important;
+    height: 40px !important;
+    padding: 0 14px !important;
+    font-size: 12.5px !important;
+    border-radius: 10px;
+    font-weight: 700;
+  }
+
+  /* ─── FLOATING FILTER FAB (was inline "Filtre" button) ─── */
+  #mobileFilterBtn {
+    display: flex !important;
+    position: fixed !important;
+    right: 16px;
+    bottom: 84px;                     /* clears the compare bar */
+    z-index: 55;
+    width: 54px !important;
+    height: 54px !important;
+    padding: 0 !important;
+    border-radius: 50% !important;
+    background: linear-gradient(135deg, #9661b8, #7a4d99) !important;
+    color: #fff !important;
+    box-shadow: 0 10px 26px rgba(122, 77, 153, 0.45);
+    align-items: center;
+    justify-content: center;
+    font-size: 0 !important;          /* hide "Filtre" text */
+    border: 3px solid #fff;
+    transition: transform 0.15s ease;
+  }
+  #mobileFilterBtn:active { transform: scale(0.92); }
+  #mobileFilterBtn svg {
+    width: 22px !important;
+    height: 22px !important;
+    stroke-width: 2.5;
+  }
+
+  /* Active-filter count badge on the FAB */
+  .filter-count-badge {
+    position: absolute;
+    top: -4px;
+    right: -4px;
+    min-width: 22px;
+    height: 22px;
+    padding: 0 6px;
+    background: var(--yellow);
+    color: var(--text);
+    border-radius: 11px;
+    font-size: 11px !important;
+    font-weight: 800;
+    line-height: 22px;
+    text-align: center;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    border: 2px solid #fff;
+  }
+
+  /* ─── SORT BAR ─── */
+  .shop-main { padding: 8px 12px 20px !important; }
+  .sort-bar {
+    margin-bottom: 10px;
+    padding: 8px 12px;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(150, 97, 184, 0.08);
+  }
+  .sort-select {
+    height: 34px !important;
+    border-radius: 8px !important;
+    font-size: 12.5px !important;
+    font-weight: 600;
+    padding: 0 26px 0 10px !important;
+    border: 1px solid var(--border);
+    background-color: #f9f4fd;
+  }
+  .view-toggle { gap: 2px; }
+  .view-btn { width: 34px !important; height: 34px !important; border-radius: 8px; }
+
+  /* ─── PRODUCT GRID ─── */
+  .products-grid,
+  #productsGrid.grid-view {
+    grid-template-columns: 1fr !important;
+    gap: 10px !important;
+  }
+
+  /* ─── CARD: horizontal compact layout ─── */
+  .product-card {
+    display: grid !important;
+    grid-template-columns: 96px 1fr;
+    gap: 12px;
+    padding: 10px;
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 2px 10px rgba(150, 97, 184, 0.10);
+    border: 1px solid rgba(150, 97, 184, 0.06);
+    animation: none !important;
+    position: relative;
+    overflow: hidden;
+  }
+  /* Left accent stripe — color-coded by medie tier */
+  .product-card::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 12px; bottom: 12px;
+    width: 3px;
+    background: var(--purple-mid);
+    border-radius: 0 3px 3px 0;
+  }
+  .product-card[data-medie-tier="gold"]::before { background: linear-gradient(180deg, #ffe34d, #ffb300); }
+  .product-card[data-medie-tier="high"]::before { background: linear-gradient(180deg, #9661b8, #7a4d99); }
+  .product-card[data-medie-tier="mid"]::before  { background: linear-gradient(180deg, #c9a8e0, #9661b8); }
+  .product-card[data-medie-tier="low"]::before  { background: var(--border); }
+  .product-card:active { transform: scale(0.985); transition: transform 0.1s ease; }
+
+  .card-image-wrap {
+    width: 96px !important;
+    height: 96px !important;
+    min-width: unset !important;
+    border-radius: 12px;
+    overflow: hidden;
+    align-self: center;
+    position: relative;
+  }
+  .card-image-wrap img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  .card-overlay {
+    background: linear-gradient(180deg, transparent 60%, rgba(122, 77, 153, 0.35));
+  }
+
+  .card-body {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 5px;
+    min-width: 0;
+    padding: 2px 0;
+  }
+
+  /* Sector chip on top of each card */
+  .card-category {
+    display: inline-block;
+    align-self: flex-start;
+    background: var(--purple-light);
+    color: var(--purple-dark) !important;
+    font-size: 10.5px !important;
+    font-weight: 700;
+    padding: 3px 8px;
+    border-radius: 6px;
+    letter-spacing: 0.2px;
+    text-transform: uppercase;
+    margin-bottom: 0 !important;
+  }
+
+  .card-title {
+    font-size: 13.5px !important;
+    font-weight: 700;
+    line-height: 1.25;
+    color: var(--text);
+    margin: 0 !important;
+    min-width: 0;
+  }
+  .card-title-link {
+    color: inherit;
+    text-decoration: none;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  /* Hide the long description on mobile */
+  .card-desc { display: none !important; }
+
+  /* Stats row: locuri inline */
+  .card-stats {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin: 0 !important;
+    padding: 0 !important;
+    font-size: 11px;
+    color: var(--text-muted);
+  }
+  .stat-chip {
+    font-size: 11px !important;
+    padding: 0 !important;
+    background: transparent !important;
+    border: none !important;
+    border-radius: 0 !important;
+    color: var(--text-muted) !important;
+    font-weight: 600;
+  }
+  .stat-chip-label::after {
+    content: ':';
+    margin-left: 1px;
+  }
+  .stat-chip-value {
+    color: var(--purple-dark) !important;
+    font-weight: 800 !important;
+  }
+  .stat-chip-unit {
+    font-weight: 500;
+    color: var(--text-muted) !important;
+    margin-left: 3px;
+    font-size: 10.5px;
+  }
+
+  /* Price row: medie left, icon buttons right */
+  .card-price-row {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    gap: 6px !important;
+    margin-top: 3px !important;
+    flex-wrap: nowrap !important;
+    padding: 0 !important;
+  }
+  .card-price-block {
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+    min-width: 0;
+  }
+  .price-unit {
+    font-size: 9.5px !important;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    font-weight: 600;
+    order: 2;
+  }
+  .price-main {
+    font-size: 22px !important;
+    font-weight: 900 !important;
+    color: var(--purple-dark) !important;
+    line-height: 1 !important;
+    background: linear-gradient(135deg, #9661b8, #7a4d99);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    order: 1;
+  }
+  /* Gold-tier cards get a special medie color */
+  .product-card[data-medie-tier="gold"] .price-main {
+    background: linear-gradient(135deg, #f0a500, #cc7a00);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  /* Range variant (Prima–ultima medie): shorter font so it fits next
+     to the action buttons on narrow phones. Used on paginationy cards. */
+  .price-main.range {
+    font-size: 17px !important;
+    letter-spacing: -0.3px;
+    white-space: nowrap;
+  }
+
+  /* Second stats row on paginationy cards — tag chips for
+     specializare / intensiv / bilingv. */
+  .card-stats-tags {
+    flex-wrap: wrap !important;
+    gap: 4px !important;
+    row-gap: 4px !important;
+  }
+  .stat-chip-tag {
+    display: inline-flex;
+    align-items: center;
+    font-size: 10.5px !important;
+    padding: 2px 8px !important;
+    background: var(--purple-light) !important;
+    color: var(--purple-dark) !important;
+    border-radius: 999px !important;
+    font-weight: 700 !important;
+    line-height: 1.4;
+    max-width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .stat-chip-tag-alt {
+    background: #fff5d6 !important;
+    color: #7a5a00 !important;
+  }
+  /* Codificare pill — monospace, subtle, admissions-specific */
+  .stat-chip-tag-code {
+    background: #f0eef5 !important;
+    color: #5a4570 !important;
+    font-family: 'Courier New', ui-monospace, monospace !important;
+    letter-spacing: 0.3px;
+    font-size: 10px !important;
+  }
+  /* Small separator dot between numeric stat-chips (e.g., locuri · clase) */
+  .stat-chip-sep {
+    color: var(--text-muted) !important;
+    font-weight: 400 !important;
+    padding: 0 2px !important;
+    opacity: 0.6;
+  }
+
+  /* Drag-and-drop sortable list items keep their stacked layout;
+     don't apply the horizontal card grid. */
+  .product-card.sort-item {
+    display: block !important;
+    grid-template-columns: none !important;
+    height: auto !important;
+    padding: 14px 12px !important;
+    background: #fff;
+    border-radius: 14px;
+    box-shadow: 0 2px 10px rgba(150, 97, 184, 0.10);
+    position: relative;
+    text-align: center;
+    margin-bottom: 8px;
+  }
+  .product-card.sort-item::before {
+    top: 8px;
+    bottom: 8px;
+  }
+  .product-card.sort-item .sort-index {
+    position: absolute;
+    top: 8px;
+    left: 10px;
+    background: var(--purple-dark);
+    color: #fff;
+    border-radius: 50%;
+    width: 26px;
+    height: 26px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-size: 12px;
+  }
+  .product-card.sort-item .card-title {
+    font-size: 13px !important;
+    line-height: 1.35 !important;
+    margin: 2px 0 !important;
+  }
+  .product-card.sort-item .price-main {
+    font-size: 14px !important;
+    font-weight: 700 !important;
+    color: var(--purple-dark) !important;
+    background: none !important;
+    -webkit-text-fill-color: initial !important;
+    margin: 4px 0 !important;
+  }
+
+  /* Compact icon-only action buttons */
+  .card-actions {
+    display: flex !important;
+    gap: 6px !important;
+    flex-shrink: 0;
+  }
+  .add-btn {
+    height: 34px !important;
+    width: 34px !important;
+    min-width: 34px !important;
+    padding: 0 !important;
+    font-size: 0 !important;
+    border-radius: 10px !important;
+    font-weight: 700;
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+    line-height: 1 !important;
+  }
+  .add-btn .btn-icon {
+    font-size: 16px;
+    line-height: 1;
+    display: inline-block;
+  }
+  .add-btn .btn-text { display: none; }
+  .add-btn.red {
+    background: #fff;
+    color: var(--purple-dark);
+    border: 1.5px solid var(--purple-light);
+  }
+  .add-btn.green {
+    background: linear-gradient(135deg, var(--purple), var(--purple-dark));
+    color: #fff;
+    border: none;
+    box-shadow: 0 3px 10px rgba(122, 77, 153, 0.25);
+  }
+  .add-btn:active { transform: scale(0.92); }
+
+  /* ─── EMPTY STATE ─── */
+  .empty-state { padding: 40px 20px; text-align: center; }
+  .empty-state h3 { font-size: 16px; margin-bottom: 6px; }
+  .empty-state p  { font-size: 13px; color: var(--text-muted); }
+
+  /* ─── PAGINATION: Prev / pages / Next ─── */
+  #pagination_controls {
+    width: 100% !important;
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    gap: 6px !important;
+    margin: 18px 0 8px !important;
+    padding: 10px 12px !important;
+    background: #fff;
+    border-radius: 14px;
+    box-shadow: 0 2px 8px rgba(150, 97, 184, 0.08);
+    overflow-x: auto;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  #pagination_controls::-webkit-scrollbar { display: none; }
+
+  #pagination_controls .table_btn {
+    padding: 8px 12px !important;
+    font-size: 12.5px !important;
+    border-radius: 8px !important;
+    background: var(--purple-light) !important;
+    color: var(--purple-dark) !important;
+    font-weight: 700;
+    border: 1px solid transparent;
+    min-width: 34px;
+    text-align: center;
+    text-decoration: none;
+    flex: 0 0 auto;
+  }
+  #pagination_controls .table_btn:active {
+    background: var(--purple) !important;
+    color: #fff !important;
+  }
+  #pagination_controls .pg-prev,
+  #pagination_controls .pg-next {
+    background: var(--purple-dark) !important;
+    color: #fff !important;
+    padding: 10px 14px !important;
+    font-size: 13px !important;
+    box-shadow: 0 3px 10px rgba(122, 77, 153, 0.25);
+  }
+  #pagination_controls .pg-current {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 40px;
+    height: 34px;
+    padding: 0 10px;
+    background: linear-gradient(135deg, #9661b8, #7a4d99);
+    color: #fff;
+    border-radius: 8px;
+    font-weight: 800;
+    font-size: 13px;
+    box-shadow: 0 3px 10px rgba(122, 77, 153, 0.3);
+  }
+
+  /* ─── COMPARE PANEL: sticky bottom card ─── */
+  .compare-panel {
+    position: fixed !important;
+    left: 12px !important;
+    right: 12px !important;
+    bottom: 12px !important;
+    top: auto !important;
+    width: auto !important;
+    max-width: unset !important;
+    border-radius: 16px !important;
+    box-shadow: 0 10px 30px rgba(122, 77, 153, 0.35) !important;
+    background: #fff !important;
+    z-index: 50;
+    overflow: hidden;
+  }
+  .compare-panel-header {
+    background: linear-gradient(135deg, #9661b8, #7a4d99) !important;
+    color: #fff !important;
+    padding: 10px 14px !important;
+    font-size: 13px;
+    font-weight: 700;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .compare-toggle {
+    background: rgba(255, 255, 255, 0.2) !important;
+    color: #fff !important;
+    border-radius: 6px !important;
+    width: 26px; height: 26px;
+    border: none;
+    font-size: 14px;
+  }
+  .compare-panel-body {
+    padding: 10px 14px !important;
+    font-size: 12px;
+    color: var(--text);
+    max-height: 120px;
+    overflow-y: auto;
+  }
+  .compare-panel-footer { padding: 10px 14px !important; border-top: 1px solid var(--border); }
+  .compare-go-btn {
+    width: 100% !important;
+    height: 42px !important;
+    background: var(--yellow) !important;
+    color: var(--text) !important;
+    font-weight: 800 !important;
+    font-size: 13.5px !important;
+    border-radius: 10px !important;
+    border: none;
+    letter-spacing: 0.2px;
+  }
+  .compare-go-btn:active { transform: scale(0.98); }
+
+  /* ─── RESULTS COUNT ─── */
+  /* Two spans on the page share this class: the empty one in .sort-bar
+     and the one in .products-grid with "Afișez N din M". Hide the
+     empty one and turn the filled one into a visible info pill.
+     Also flip it to the TOP of the grid via order:-1. */
+  .sort-bar .results-count:empty {
+    display: none !important;
+  }
+  .results-count {
+    position: static !important;
+    display: block !important;
+    order: -1;
+    margin: 4px 0 10px !important;
+    padding: 10px 16px !important;
+    background: #fff !important;
+    border: 1px solid rgba(150, 97, 184, 0.15) !important;
+    border-radius: 12px !important;
+    box-shadow: 0 2px 8px rgba(150, 97, 184, 0.08);
+    font-size: 12.5px !important;
+    color: var(--text) !important;
+    font-weight: 600 !important;
+    text-align: center;
+    line-height: 1.4;
+    grid-column: 1 / -1;
+    width: auto !important;
+    max-width: 100% !important;
+  }
+  .results-count strong {
+    color: var(--purple-dark) !important;
+    font-weight: 800 !important;
+  }
+
+  /* ═══════════════════════════════════════════════════════════════
+     FILTER DRAWER as a BOTTOM SHEET
+     Desktop CSS slides it from the LEFT (300px wide). On mobile
+     we override to slide UP from the bottom, full-width, with a
+     drag handle. Also styles the CLONED filter cards inside.
+     ═══════════════════════════════════════════════════════════════ */
+
+  /* The .filter-drawer container stays position:fixed inset:0, but the
+     backdrop/panel behave differently. */
+  .filter-drawer.open { align-items: flex-end !important; }
+  .filter-drawer-backdrop { background: rgba(0, 0, 0, 0.5) !important; }
+
+  .filter-drawer-panel {
+    position: relative !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    height: auto !important;
+    max-height: 88vh !important;
+    padding: 6px 16px 24px !important;
+    background: #fff !important;
+    border-radius: 22px 22px 0 0 !important;
+    box-shadow: 0 -14px 40px rgba(122, 77, 153, 0.25) !important;
+    transform: translateY(100%) !important;
+    transition: transform 0.3s ease !important;
+    overflow-y: auto !important;
+    gap: 12px !important;
+  }
+  .filter-drawer.open .filter-drawer-panel {
+    transform: translateY(0) !important;
+  }
+  /* Grab handle at the top */
+  .filter-drawer-panel::before {
+    content: '';
+    display: block;
+    width: 44px;
+    height: 4px;
+    background: var(--purple-mid);
+    border-radius: 2px;
+    margin: 8px auto 6px;
+    flex-shrink: 0;
+  }
+
+  .drawer-header {
+    padding: 0 4px 12px !important;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 8px;
+  }
+  .drawer-header h2 { font-size: 17px !important; font-weight: 800; color: var(--text); }
+  .drawer-close {
+    font-size: 22px !important;
+    color: var(--text-muted) !important;
+    padding: 4px 10px !important;
+  }
+
+  /* Cloned sidebar inside the drawer — clean, mobile-native look */
+  .filter-drawer-panel .filter-sidebar {
+    padding: 0 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    gap: 12px !important;
+    display: flex !important;
+    flex-direction: column;
+    width: 100% !important;
+  }
+  .filter-drawer-panel .filter-card {
+    background: #fdfbfe !important;
+    border: 1px solid var(--border) !important;
+    border-radius: 14px !important;
+    padding: 12px 14px !important;
+    box-shadow: none !important;
+  }
+  .filter-drawer-panel .filter-card-header {
+    display: flex !important;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px !important;
+    padding: 0 !important;
+  }
+  .filter-drawer-panel .filter-card-header h3 {
+    font-size: 14px !important;
+    font-weight: 800;
+    color: var(--purple-dark) !important;
+    margin: 0 !important;
+    letter-spacing: 0.2px;
+  }
+  .filter-drawer-panel .filter-toggle {
+    font-size: 14px;
+    color: var(--purple-dark);
+    cursor: pointer;
+    padding: 2px 6px;
+  }
+  .filter-drawer-panel .filter-options {
+    display: flex !important;
+    flex-direction: column;
+    gap: 4px !important;
+    padding: 0 !important;
+  }
+  .filter-drawer-panel .filter-options.hidden { display: none !important; }
+
+  /* Each filter row: [ ✓ ] label ... [count]
+     Mirrors desktop: real <input> stays display:none, the fake
+     .check-box div is the visible tickbox. We just make it bigger
+     and purple for mobile touch targets. */
+  .filter-drawer-panel .filter-option {
+    display: flex !important;
+    align-items: center !important;
+    gap: 10px !important;
+    padding: 8px 6px !important;
+    background: transparent !important;
+    border-radius: 8px;
+    min-height: 40px;
+    cursor: pointer;
+    margin-bottom: 0 !important;
+    transition: background 0.15s ease;
+  }
+  .filter-drawer-panel .filter-option:active {
+    background: var(--purple-light);
+  }
+  /* Real input stays hidden — desktop already sets display:none, we affirm it */
+  .filter-drawer-panel .filter-option input[type="checkbox"] {
+    display: none !important;
+  }
+  /* Fake .check-box IS the visible checkbox on both desktop and mobile.
+     Override desktop's 18px sizing with a touch-friendly 22px + purple. */
+  .filter-drawer-panel .filter-option .check-box {
+    display: flex !important;
+    width: 22px !important;
+    height: 22px !important;
+    min-width: 22px !important;
+    border: 2px solid var(--purple-mid) !important;
+    border-radius: 6px !important;
+    background: #fff !important;
+    flex-shrink: 0 !important;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.15s ease;
+  }
+  .filter-drawer-panel .filter-option input:checked + .check-box {
+    background: linear-gradient(135deg, #9661b8, #7a4d99) !important;
+    border-color: transparent !important;
+    box-shadow: 0 2px 6px rgba(122, 77, 153, 0.25);
+  }
+  .filter-drawer-panel .filter-option input:checked + .check-box::after {
+    content: '✓' !important;
+    color: #fff !important;
+    font-size: 13px !important;
+    font-weight: 900 !important;
+    line-height: 1;
+  }
+  /* Label: takes ALL remaining space, wraps naturally, no truncation */
+  .filter-drawer-panel .filter-option-label {
+    flex: 1 1 auto !important;
+    min-width: 0 !important;
+    font-size: 13.5px !important;
+    color: var(--text) !important;
+    font-weight: 600 !important;
+    line-height: 1.3 !important;
+    white-space: normal !important;
+    word-break: normal !important;
+    overflow: visible !important;
+    text-overflow: clip !important;
+  }
+  /* Count: pill, takes only its content width */
+  .filter-drawer-panel .filter-option-count {
+    flex: 0 0 auto !important;
+    font-size: 11px !important;
+    color: var(--purple-dark) !important;
+    background: var(--purple-light) !important;
+    padding: 3px 9px !important;
+    border-radius: 999px !important;
+    font-weight: 700 !important;
+    min-width: 32px !important;
+    text-align: center !important;
+  }
+
+  /* Medie range inputs — nicer, aligned */
+  .filter-drawer-panel .price-range-wrap { padding: 0 !important; }
+  .filter-drawer-panel .price-inputs {
+    display: flex !important;
+    align-items: center;
+    gap: 8px;
+  }
+  .filter-drawer-panel .price-input {
+    flex: 1;
+    height: 42px !important;
+    border: 1.5px solid var(--border) !important;
+    border-radius: 10px !important;
+    padding: 0 12px !important;
+    font-size: 14px !important;
+    font-weight: 700;
+    text-align: center;
+    background: #fff !important;
+    color: var(--text) !important;
+  }
+  .filter-drawer-panel .price-input:focus {
+    outline: none;
+    border-color: var(--purple) !important;
+    box-shadow: 0 0 0 3px rgba(150, 97, 184, 0.15);
+  }
+  .filter-drawer-panel .price-sep {
+    font-weight: 800;
+    color: var(--text-muted);
+    padding: 0 4px;
+  }
+
+  /* ─── TOAST ─── */
+  .toast {
+    left: 12px !important;
+    right: 12px !important;
+    bottom: 84px !important;
+    border-radius: 12px !important;
+    background: var(--purple-dark) !important;
+    color: #fff !important;
+    padding: 12px 16px !important;
+    font-size: 13px !important;
+    font-weight: 600;
+    box-shadow: 0 10px 26px rgba(122, 77, 153, 0.35);
+  }
+}
+
+/* Extra squeeze for very narrow devices */
+@media (max-width: 380px) {
+  .product-card { grid-template-columns: 84px 1fr; padding: 8px; }
+  .card-image-wrap { width: 84px !important; height: 84px !important; }
+  .card-title { font-size: 13px !important; }
+  .price-main { font-size: 20px !important; }
+  .add-btn { height: 32px !important; width: 32px !important; min-width: 32px !important; }
+  .add-btn .btn-icon { font-size: 14px; }
+  .shop-banner h1 { font-size: 18px !important; }
+  #mobileFilterBtn { width: 50px !important; height: 50px !important; right: 12px; }
+}
