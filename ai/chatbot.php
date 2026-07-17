@@ -598,7 +598,7 @@ $_SESSION['pagename']  = 'page-home';
     <section class="chatbot">
       <div class="chatbot-header">
         <h2>Eliceu AI</h2>
-        <p>Model Random Forest pentru predicții de admitere</p>
+        <p style="color:#fff; margin-bottom:7px;">Model Random Forest pentru predicții de admitere</p>
       </div>
 
       <div class="messages" id="messages">
