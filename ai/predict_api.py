@@ -40,8 +40,6 @@ class AdmitereData(BaseModel):
     ultima_pozitie_2024: int = Field(ge=1)
     ultima_pozitie_2023: int = Field(ge=1)
 
-    # Sunt primite pentru compatibilitate cu PHP,
-    # dar sunt recalculate aici.
     pozitie_medie_intrare: int
     diferenta_pozitie: int
 
@@ -51,12 +49,6 @@ def clamp(value: float, minimum: float, maximum: float) -> float:
 
 
 def get_model_classes():
-    """
-    Extrage clasele modelului indiferent dacă este:
-    - model simplu sklearn;
-    - Pipeline;
-    - estimator cu atribut classes_.
-    """
     if hasattr(model, "classes_"):
         return list(model.classes_)
 
@@ -70,9 +62,6 @@ def get_model_classes():
 
 
 def get_admission_probability(probabilities) -> float:
-    """
-    Returnează probabilitatea pentru clasa 1 = admis.
-    """
     classes = get_model_classes()
 
     if 1 not in classes:
@@ -99,13 +88,7 @@ def calculate_position_score(
     student_position: int,
     average_entry_position: int
 ) -> float:
-    """
-    Scor continuu după poziție.
 
-    Exemplu:
-    - elevul este înaintea limitei istorice -> scor peste 50;
-    - elevul este după limită -> scor sub 50.
-    """
     difference = average_entry_position - student_position
 
     return 50 + 45 * math.tanh(difference / 650)
@@ -115,11 +98,7 @@ def calculate_average_score(
     student_average: float,
     school_average: float
 ) -> float:
-    """
-    Scor continuu după diferența de medie.
 
-    Divizorul 0.25 face diferențele de medie mai importante.
-    """
     difference = student_average - school_average
 
     return 50 + 45 * math.tanh(difference / 0.25)
@@ -130,10 +109,7 @@ def calculate_trend_score(
     position_2024: int,
     position_2023: int
 ) -> float:
-    """
-    Dacă poziția-limită din 2025 este mai mare decât în anii anteriori,
-    specializarea a devenit ceva mai accesibilă.
-    """
+
     previous_average = (position_2024 + position_2023) / 2
     trend_difference = position_2025 - previous_average
 
@@ -145,9 +121,7 @@ def calculate_stability_score(
     position_2024: int,
     position_2023: int
 ) -> float:
-    """
-    Specializările cu poziții foarte instabile primesc un scor puțin mai prudent.
-    """
+
     positions = [position_2025, position_2024, position_2023]
     mean_position = sum(positions) / len(positions)
 
@@ -168,21 +142,15 @@ def apply_logical_adjustments(
     student_position: int,
     average_entry_position: int
 ) -> float:
-    """
-    Corecții logice pentru a evita situații contraintuitive.
 
-    Media și poziția rămân ambele importante.
-    """
     average_gap = student_average - school_average
     position_gap = average_entry_position - student_position
 
-    # Penalizare dacă media elevului este sub media specializării.
     if average_gap < 0:
         probability -= min(20, abs(average_gap) * 32)
     else:
         probability += min(10, average_gap * 14)
 
-    # Penalizare dacă poziția elevului este după limita istorică.
     if position_gap < 0:
         probability -= min(18, abs(position_gap) / 90)
     else:
@@ -251,10 +219,6 @@ def predict(data: AdmitereData):
             data.ultima_pozitie_2023
         )
 
-        # Formula finală:
-        # - modelul rămâne important;
-        # - poziția și media cântăresc mai mult decât înainte;
-        # - trendul și stabilitatea au influență mică.
         final_probability = (
             0.38 * model_probability
             + 0.30 * position_score
@@ -290,8 +254,6 @@ def predict(data: AdmitereData):
             "probabilitate": percentage,
             "nivel": level,
 
-            # Câmpuri utile pentru verificare.
-            # PHP-ul poate să le ignore.
             "pozitie_medie_intrare": average_entry_position,
             "diferenta_pozitie": position_difference,
             "diferenta_medie": round(
