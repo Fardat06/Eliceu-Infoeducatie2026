@@ -102,8 +102,6 @@ $order = match ($sort) {
   'name-desc'  => 'ORDER BY  h1.nume_scoala DESC',
   default      => 'ORDER BY  h1.nume_scoala ASC'
 };
-
-// Personal list preserves user's drag-drop order
 if ($filename == 'licee_specializari_lista.php' && in_array($sort, ['default', '']) && !empty($subject)) {
   $order = "ORDER BY FIELD(h1.id, " . $subject . ")";
 }
@@ -118,7 +116,6 @@ $page_rows = $itemperpage;
 $last = ceil($rows / $page_rows);
 if ($last < 1) $last = 1;
 
-// Fix: correct regex to strip anything that isn't a digit
 $pagenum = 1;
 if (isset($_GET['pn'])) {
   $pagenum = (int) preg_replace('#[^0-9]#', '', $_GET['pn']);
@@ -131,17 +128,10 @@ $stmt3 = $stmt . " " . $limit;
 $stmt1 = $con->prepare($stmt3);
 $stmt1->execute();
 
-
-/* PAGINATION CONTROLS
- * URL now uses the *actual* page filename ($filename), so pagination
- * on licee_admitere.php stays on that page instead of jumping to
- * licee_specializari.php (which was the old hardcoded bug).
- */
 $paginationCtrls = '';
 if ($last != 1) {
   $currentParams = $_GET;
   unset($currentParams['pn']);
-  // Default to licee_admitere.php when included from a page whose name we can't tell.
   $ownPage = ($filename === '' || $filename === null) ? 'licee_admitere.php' : $filename;
   $baseUrl = $ownPage . '?' . http_build_query($currentParams);
   $sep = empty($currentParams) ? '' : '&';
@@ -181,9 +171,6 @@ if ($last != 1) {
   $pos = ($pagenum - 1) * $itemperpage;
   foreach ($rows1 as $row) {
     if ($filename == 'licee_specializari_lista.php') {
-      /* ── DRAG-AND-DROP "LISTA MEA" MODE — compact stacked card,
-             preserved unchanged. Mobile CSS excludes .sort-item
-             from the horizontal grid so drag/drop still works. ── */
       $pos++;
       echo '<div class="product-card sort-item" style="animation-delay:.1s;height: 200px;" id="' . $row['id'] . '">';
       echo '<span class="sort-index">' . $pos . '</span>';
@@ -199,9 +186,6 @@ if ($last != 1) {
       echo '</div>';
 
     } else {
-      /* ── NORMAL ADMITERE CARD — mobile-friendly layout with
-             medie tier stripe, tag chips, codificare pill,
-             icon action button. ── */
       $medieVal   = is_numeric($row['media_ultimului_admis']) ? (float)$row['media_ultimului_admis'] : 0;
       $medieTier  = $medieVal >= 9   ? 'gold'
                   : ($medieVal >= 8   ? 'high'
@@ -211,7 +195,6 @@ if ($last != 1) {
       $locuriTxt  = (is_numeric($locuriNr) && (int)$locuriNr === 1) ? 'loc' : 'locuri';
       $claseNr    = $row['clase'];
       $claseTxt   = (is_numeric($claseNr) && (int)$claseNr === 1) ? 'clasa' : 'clase';
-      // "strpos != ''" is a fragile check; use !== false so id-at-position-0 still counts as present
       $inList     = isset($_SESSION['ID']) && strpos($subject ?? '', (string)$row['id']) !== false;
       $listCls    = $inList ? 'green' : 'red';
       ?>
@@ -237,7 +220,6 @@ if ($last != 1) {
           </div>
           <div class="card-desc"><?= $row['short_description'] ?></div>
 
-          <!-- Locuri + clase combined -->
           <div class="card-stats">
             <div class="stat-chip stat-chip-label">Locuri</div>
             <div class="stat-chip stat-chip-value">
@@ -249,7 +231,6 @@ if ($last != 1) {
             </div>
           </div>
 
-          <!-- Specialization + mentiune + codificare as tag pills -->
           <div class="card-stats card-stats-tags">
             <div class="stat-chip stat-chip-tag"><?= $row['specializare'] ?></div>
             <?php if (!empty($row['mentiune']) && $row['mentiune'] !== '-'): ?>
@@ -262,7 +243,6 @@ if ($last != 1) {
             <?php endif; ?>
           </div>
 
-          <!-- Medie + action button -->
           <div class="card-price-row">
             <div class="card-price-block">
               <div class="price-unit">Ultima medie</div>
@@ -286,7 +266,6 @@ if ($last != 1) {
     }
   } ?>
 
-  <!-- Desktop-only absolute position; mobile CSS overrides via !important -->
   <span class="results-count" style="position: absolute; margin-top: -50px;">
     Afișez <strong id="countShown">
       <?php
