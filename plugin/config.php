@@ -1,19 +1,8 @@
 <?php
-if (!defined('DB_DRIVER')) {
-    define('DB_DRIVER', 'mysqli');
-}
-if (!defined('DB_HOSTNAME')) {
-    define('DB_HOSTNAME', 'localhost');
-}
-if (!defined('DB_USERNAME')) {
-    define('DB_USERNAME', 'root');
-}
-if (!defined('DB_PASSWORD')) {
-    define('DB_PASSWORD', '');
-}
-if (!defined('DB_DATABASE')) {
-    define('DB_DATABASE', 'clasa8');
-}
-if (!defined('DB_PREFIX')) {
-    define('DB_PREFIX', 'home_');
-}
+define('DB_DRIVER', getenv('DB_DRIVER') ?: 'mysqli');
+define('DB_HOSTNAME', getenv('DB_HOSTNAME') ?: 'localhost');
+define('DB_USERNAME', getenv('DB_USERNAME') ?: 'root');
+define('DB_PASSWORD', getenv('DB_PASSWORD') ?: '');
+define('DB_DATABASE', getenv('DB_DATABASE') ?: 'clasa8');
+define('DB_PREFIX', getenv('DB_PREFIX') ?: 'home_');
+
