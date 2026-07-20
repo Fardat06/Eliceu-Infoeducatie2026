@@ -4,6 +4,12 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+}
+
+/* Poppins doar pentru formular, nu pentru chrome-ul comun (header/footer),
+   care trebuie sa ramana pe Inter ca in liceu.css */
+.wrapper, .wrapper *,
+.form-box, .form-box *{
     font-family:'Poppins',sans-serif;
 }
 
@@ -109,7 +115,7 @@ body{
     display: flex;
     flex-direction: column;
     transition: .5s ease-in-out;
-
+    /*background-color: #9661b8c7;*/
 }
 
 .register-container{
@@ -137,7 +143,9 @@ body{
     margin-left: 5px;
 }
 
-header{
+.form-box header,
+.login-container header,
+.register-container header{
     color: #fff;
     font-size: 30px;
     text-align: center;
@@ -363,4 +371,99 @@ header{
         opacity:1;
         transform:translateY(0);
     }
+}
+
+
+:root {
+  --purple:       #9661b8;
+  --purple-dark:  #7a4d99;
+  --purple-light: #eee3f4;
+  --yellow:       #ffe34d;
+  --sidebar-bg1:  #8c63b3;
+  --sidebar-bg2:  #6f4796;
+}
+
+body > header {
+  width: 100%; height: 72px;
+  background: var(--purple);
+  position: fixed; top: 0; left: 0;
+  z-index: 1000;
+  display: flex; align-items: center;
+  justify-content: space-between;
+  padding: 0 42px;
+  font-family: 'Inter', sans-serif;
+  color: inherit;
+  text-align: left;
+}
+.logo-area { display: flex; align-items: center; gap: 16px; }
+.menu { font-size: 32px; color: #fff; font-weight: 900; background: transparent; border: 0; cursor: pointer; }
+.logo { font-size: 34px; font-weight: 900; color: var(--yellow); letter-spacing: -1px; }
+body > header nav { display: flex; gap: 38px; }
+body > header nav a { color: #fff; text-decoration: none; font-size: 13px; font-weight: 900; }
+
+.sidebar {
+  position: fixed; top: 0; left: -320px;
+  width: 320px; height: 100vh;
+  background: linear-gradient(180deg, var(--sidebar-bg1) 0%, var(--sidebar-bg2) 100%);
+  z-index: 2000; padding: 110px 40px;
+  display: flex; flex-direction: column; gap: 28px;
+  transition: 0.35s;
+  box-shadow: 6px 0 30px rgba(0,0,0,.18);
+  font-family: 'Inter', sans-serif;
+}
+.sidebar.active { left: 0; }
+.sidebar a { text-decoration: none; color: #fff; font-size: 22px; font-weight: 900; transition: 0.2s; }
+.sidebar a:hover { color: var(--yellow); transform: translateX(8px); }
+.close-btn { position: absolute; top: 28px; right: 28px; background: transparent; border: none; font-size: 34px; cursor: pointer; color: #fff; font-weight: 900; }
+.overlay { position: fixed; inset: 0; background: rgba(0,0,0,.35); z-index: 1500; opacity: 0; pointer-events: none; transition: opacity 0.35s; }
+.overlay.active { opacity: 1; pointer-events: all; }
+
+footer {
+  background: #786286;
+  padding: 80px 90px 90px;
+  color: white;
+  font-family: 'Inter', sans-serif;
+  position: relative;
+  z-index: 3;
+}
+.footer-logo { font-size: 24px; font-weight: 900; color: var(--yellow); margin-bottom: 22px; }
+.footer-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 80px; }
+footer h3 { font-size: 17px; font-weight: 900; margin-bottom: 14px; }
+footer a { display: block; color: white; text-decoration: none; font-size: 13px; font-weight: 700; margin-bottom: 8px; }
+
+@media (max-width: 900px) {
+  body > header { padding: 0 24px; }
+  body > header nav { gap: 20px; }
+
+  footer { padding: 60px 24px 70px; }
+  .footer-grid { grid-template-columns: 1fr; gap: 24px; }
+}
+
+@media (max-width: 680px) {
+  body > header { padding: 0 16px; height: 60px; }
+  body > header nav { gap: 14px; }
+  body > header nav a { font-size: 11px; }
+  .logo { font-size: 26px; }
+  .menu { font-size: 26px; }
+  .logo-area { gap: 10px; }
+
+  .sidebar { width: 280px; padding: 80px 28px; }
+  .sidebar a { font-size: 20px; }
+  .close-btn { top: 20px; right: 22px; font-size: 30px; }
+
+  .footer-grid { grid-template-columns: 1fr; gap: 24px; }
+  footer { padding: 36px 16px 48px; }
+  .footer-logo { margin-bottom: 16px; }
+}
+
+@media (max-width: 380px) {
+  .logo { font-size: 22px; }
+  body > header nav { gap: 8px; }
+  body > header nav a { font-size: 10px; }
+}
+
+
+.wrapper { padding-top: 72px; }
+@media (max-width: 680px) {
+  .wrapper { padding-top: 60px; }
 }
