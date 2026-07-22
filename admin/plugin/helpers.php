@@ -1,5 +1,4 @@
 <?php
-// admin/helpers.php — funcții utilitare pentru modulul de administrare
 
 if (!function_exists('e')) {
     function e($v): string
