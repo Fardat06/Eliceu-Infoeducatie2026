@@ -60,7 +60,6 @@ $(function () {
     return 'danger';
   }
 
-  /* ---------------- DataTable ---------------- */
   const dt = $('#tbl').DataTable({
     ajax: { url: API + '?action=list', dataSrc: 'data' },
     pageLength: 25,
@@ -152,7 +151,6 @@ $(function () {
   }
   dt.on('xhr', () => setTimeout(() => stats(dt), 0));
 
-  /* ---------------- filtre ---------------- */
   $('#fLiceu').on('change', function () {
     dt.column(2).search(this.value ? '^' + escRe(this.value) + '$' : '', true, false).draw();
   });
@@ -169,7 +167,6 @@ $(function () {
   });
   $('#fProb').on('change', () => dt.draw());
 
-/* ---------------- lookups ---------------- */
   let lookupsReady = false;
 
   function fillSelect($sel, values, keepFirst = true) {
@@ -179,7 +176,6 @@ $(function () {
     values.forEach(v => $sel.append(new Option(v, v)));
   }
 
-  /** Adaugă o valoare care nu există în listă (date vechi, neconforme). */
   function ensureOption($sel, val) {
     if (!val) return;
     const exists = $sel.find('option').filter(function () { return this.value === val; }).length;
@@ -192,12 +188,11 @@ $(function () {
   const lookupsLoaded = $.getJSON(API + '?action=lookups', d => {
     if (!d || !d.ok) return;
 
-    // filtre din antetul tabelului
+  
     d.name.forEach(v   => $('#fLiceu').append(new Option(v, v)));
     d.profil.forEach(v => $('#fProfil').append(new Option(v, v)));
     d.zone.forEach(v   => { $('#fZone').append(new Option(v, v)); $('#dlZone').append(`<option value="${esc(v)}">`); });
 
-    // selecturi din formular
     fillSelect($('#fName'),     d.name);
     fillSelect($('#fTip'),      d.tip);
     fillSelect($('#fProfilIn'), d.profil);
@@ -208,7 +203,7 @@ $(function () {
     lookupsReady = true;
   });
 
-  /* ---------------- selecție ---------------- */
+
   function refreshSel() {
     $('#selCount').text(selected.size);
     $('#btnBulkDelete').prop('disabled', selected.size === 0);
@@ -230,7 +225,6 @@ $(function () {
     refreshSel();
   });
 
-  /* ---------------- ADAUGĂ ---------------- */
 $('#btnAdd').on('click', function () {
     $('#frm')[0].reset();
     $('#fAction').val('create');
@@ -261,7 +255,6 @@ $('#tbl tbody').on('click', '.btnEdit', function () {
         $('#fId').val(l.id);
         $('#modalTitle').text('Modifică #' + (+l.id) + ': ' + l.name + ' – ' + l.specializare);
 
-        // selecturi — adăugăm opțiunea dacă valoarea nu e în lista de referință
         ensureOption($('#fName'),     l.name);
         ensureOption($('#fTip'),      l.tip);
         ensureOption($('#fProfilIn'), l.profil);
@@ -298,7 +291,6 @@ $('#tbl tbody').on('click', '.btnEdit', function () {
       }).fail(() => notify('Nu s-au putut încărca datele.', 'danger'));
     });
   });
-  /* ---------------- SALVEAZĂ ---------------- */
   $('#frm').on('submit', function (ev) {
     ev.preventDefault();
     if (!this.checkValidity()) { this.reportValidity(); return; }
@@ -314,7 +306,6 @@ $('#tbl tbody').on('click', '.btnEdit', function () {
       .always(() => $('#btnSave').prop('disabled', false).removeClass('loading'));
   });
 
-  /* ---------------- acțiuni rapide ---------------- */
   function post(data, after) {
     data.csrf = $('input[name=csrf]').first().val();
     $.post(API, data, null, 'json')
@@ -346,7 +337,6 @@ $('#tbl tbody').on('click', '.btnEdit', function () {
     });
   });
 
-  /* ---------------- verificare integritate ---------------- */
   $('#btnIntegrity').on('click', function () {
     $('#intBody').html('Se verifică…');
     intModal.show();
