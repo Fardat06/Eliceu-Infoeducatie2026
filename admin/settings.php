@@ -27,7 +27,6 @@ include __DIR__ . '/template/header.php';
           <input type="hidden" name="csrf" value="<?= e($csrf) ?>">
           <input type="hidden" name="action" value="save">
 
-          <!-- ============ identitatea site-ului ============ -->
           <div class="dashboard-table-container" style="margin-bottom:var(--space-lg)">
             <div class="dashboard-table-header">
               <h3 class="dashboard-table-title">
@@ -90,7 +89,6 @@ include __DIR__ . '/template/header.php';
             </div>
           </div>
 
-          <!-- ============ adrese de email ============ -->
           <div class="dashboard-table-container" style="margin-bottom:var(--space-lg)">
             <div class="dashboard-table-header">
               <h3 class="dashboard-table-title">
@@ -145,7 +143,6 @@ include __DIR__ . '/template/header.php';
             </div>
           </div>
 
-          <!-- ============ server SMTP ============ -->
           <div class="dashboard-table-container" style="margin-bottom:var(--space-lg)">
             <div class="dashboard-table-header">
               <h3 class="dashboard-table-title">
@@ -197,7 +194,6 @@ include __DIR__ . '/template/header.php';
             </div>
           </div>
 
-          <!-- ============ mentenanță ============ -->
           <div class="dashboard-table-container" style="margin-bottom:var(--space-lg)">
             <div class="dashboard-table-header">
               <h3 class="dashboard-table-title">
