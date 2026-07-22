@@ -1,13 +1,11 @@
 <?php
-// admin/plugin/profil_api.php — CRUD pentru home_profil (cheie = id)
+
 ob_start();
 require_once __DIR__ . '/admin_init.php';
 if (ob_get_length()) { ob_clean(); }
 
-/** @var PDO $con */
 $T = DB_PREFIX . 'profil';
 
-// tabele care stochează profilul ca text (nu prin FK)
 $REFS = [
     DB_PREFIX . 'liceu'          => 'profil',
     DB_PREFIX . 'admitere'       => 'profil',
@@ -24,7 +22,6 @@ if (in_array($action, ['create', 'update', 'delete', 'bulk_delete'], true)) {
 
 function p($k, $d = '') { return trim((string)($_POST[$k] ?? $d)); }
 
-/** Verifică dacă un tabel există (unele pot lipsi în anumite instalări). */
 function tableExists(PDO $con, string $t): bool {
     static $cache = [];
     if (isset($cache[$t])) return $cache[$t];
@@ -36,7 +33,6 @@ function tableExists(PDO $con, string $t): bool {
     }
 }
 
-/** Numără câte rânduri folosesc un profil, pe toate tabelele de referință. */
 function countUsage(PDO $con, array $refs, string $desc): int {
     $total = 0;
     foreach ($refs as $tbl => $col) {
@@ -51,7 +47,6 @@ function countUsage(PDO $con, array $refs, string $desc): int {
 try {
     switch ($action) {
 
-        /* ---------------- LISTĂ ---------------- */
         case 'list':
             $rows = $con->query("SELECT id_profil, description FROM `$T` ORDER BY description ASC")
                         ->fetchAll(PDO::FETCH_ASSOC);
@@ -61,7 +56,6 @@ try {
             unset($r);
             json_out(['data' => $rows]);
 
-        /* ---------------- CITEȘTE ---------------- */
         case 'get':
             $id = (int)($_GET['id'] ?? 0);
             $st = $con->prepare("SELECT * FROM `$T` WHERE id_profil = ? LIMIT 1");
@@ -70,7 +64,6 @@ try {
             if (!$row) json_out(['ok' => false, 'msg' => 'Profilul nu a fost găsit.'], 404);
             json_out(['ok' => true, 'row' => $row]);
 
-        /* ---------------- ADAUGĂ ---------------- */
         case 'create':
             $desc = p('description');
             if ($desc === '')           json_out(['ok' => false, 'msg' => 'Denumirea este obligatorie.'], 422);
@@ -84,8 +77,6 @@ try {
             $st->execute([$desc]);
             json_out(['ok' => true, 'msg' => 'Profilul „' . $desc . '” a fost adăugat.']);
 
-        /* ---------------- MODIFICĂ ---------------- */
-/* ---------------- MODIFICĂ ---------------- */
         case 'update':
             $id   = (int)p('id_profil');
             $desc = p('description');
@@ -94,24 +85,20 @@ try {
             if ($desc === '')           json_out(['ok' => false, 'msg' => 'Denumirea este obligatorie.'], 422);
             if (mb_strlen($desc) > 250) json_out(['ok' => false, 'msg' => 'Denumirea depășește 250 de caractere.'], 422);
 
-            // valoarea veche, necesară pentru propagare
             $st = $con->prepare("SELECT description FROM `$T` WHERE id_profil = ? LIMIT 1");
             $st->execute([$id]);
             $old = $st->fetchColumn();
             if ($old === false) json_out(['ok' => false, 'msg' => 'Profilul nu mai există.'], 404);
 
-            // denumire duplicată la alt id?
             $st = $con->prepare("SELECT 1 FROM `$T` WHERE description = ? AND id_profil <> ? LIMIT 1");
             $st->execute([$desc, $id]);
             if ($st->fetch()) json_out(['ok' => false, 'msg' => 'Această denumire este deja folosită.'], 409);
 
             $con->beginTransaction();
             try {
-                // 1. actualizăm tabelul de referință
                 $con->prepare("UPDATE `$T` SET description = ? WHERE id_profil = ?")
                     ->execute([$desc, $id]);
 
-                // 2. propagăm în tabelele care stochează profilul ca text
                 $afectate = 0;
                 $detaliu  = [];
 
@@ -142,7 +129,6 @@ try {
             json_out(['ok' => true, 'msg' => $msg]);
             
 
-        /* ---------------- ȘTERGE ---------------- */
         case 'delete':
             $id = (int)p('id_profil');
             if (!$id) json_out(['ok' => false, 'msg' => 'ID lipsă.'], 400);
@@ -162,7 +148,6 @@ try {
             $st->execute([$id]);
             json_out(['ok' => true, 'msg' => 'Profilul a fost șters.']);
 
-        /* ---------------- ȘTERGERE MULTIPLĂ ---------------- */
         case 'bulk_delete':
             $ids = $_POST['ids'] ?? [];
             if (!is_array($ids) || !$ids) json_out(['ok' => false, 'msg' => 'Nicio selecție.'], 400);
