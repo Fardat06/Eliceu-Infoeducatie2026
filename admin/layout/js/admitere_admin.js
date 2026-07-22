@@ -51,7 +51,6 @@ $(function () {
   }
   const num = v => (v === null || v === '' ? '–' : v);
 
-  /* ---------------- DataTable ---------------- */
   const dt = $('#tbl').DataTable({
     ajax: {
       url: API,
@@ -131,8 +130,7 @@ $(function () {
       : '–');
   }
   dt.on('xhr', () => setTimeout(() => stats(dt), 0));
-
-  /* ---------------- schimbare an ---------------- */
+  
   $('#fYear').on('change', function () {
     year = this.value;
     $('#fYearHidden').val(year);
@@ -143,7 +141,6 @@ $(function () {
     loadLookups();
   });
 
-  /* ---------------- filtre ---------------- */
   $('#fScoala').on('change', function () {
     dt.column(2).search(this.value ? '^' + escRe(this.value) + '$' : '', true, false).draw();
   });
@@ -154,7 +151,6 @@ $(function () {
     dt.column(4).search(this.value ? '^' + escRe(this.value) + '$' : '', true, false).draw();
   });
 
-  /* ---------------- lookups ---------------- */
   function loadLookups() {
     $.getJSON(API + '?action=lookups&year=' + year, d => {
       if (!d || !d.ok) return;
@@ -182,7 +178,6 @@ $(function () {
   }
   loadLookups();
 
-  /* ---------------- selecție ---------------- */
   function refreshSel() {
     $('#selCount').text(selected.size);
     $('#btnBulkDelete').prop('disabled', selected.size === 0 || !rw);
@@ -204,7 +199,6 @@ $(function () {
     refreshSel();
   });
 
-  /* ---------------- ADAUGĂ ---------------- */
   $('#btnAdd').on('click', function () {
     if (!rw) return notify('Anul ' + year + ' este disponibil doar în citire.', 'warning');
     $('#frm')[0].reset();
@@ -218,7 +212,6 @@ $(function () {
     setTimeout(() => $('#fCod').trigger('focus'), 50);
   });
 
-  /* ---------------- MODIFICĂ ---------------- */
   $('#tbl tbody').on('click', '.btnEdit', function () {
     const key = $(this).data('key');
     $.getJSON(API + '?action=get&year=' + year + '&key=' + encodeURIComponent(key), d => {
@@ -255,7 +248,6 @@ $(function () {
     }).fail(() => notify('Nu s-au putut încărca datele.', 'danger'));
   });
 
-  /* ---------------- SALVEAZĂ ---------------- */
   $('#frm').on('submit', function (ev) {
     ev.preventDefault();
     if (!rw) return;
@@ -271,8 +263,7 @@ $(function () {
       .fail(x => notify((x.responseJSON && x.responseJSON.msg) || 'Eroare la salvare.', 'danger'))
       .always(() => { $('#btnSave').prop('disabled', false).removeClass('loading'); });
   });
-
-  /* ---------------- ȘTERGE ---------------- */
+  
   function post(data, after) {
     data.csrf = $('input[name=csrf]').val();
     data.year = year;
