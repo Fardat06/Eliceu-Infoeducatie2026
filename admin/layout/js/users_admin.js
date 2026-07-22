@@ -1,8 +1,7 @@
-/* admin/layout/js/users_admin.js — CRUD home_users */
 $(function () {
 
   const API = window.API || 'plugin/users_api.php';
-  let me = 0;   // UserID-ul contului curent
+  let me = 0;   
 
   const modalEl = document.getElementById('modalForm');
   const passEl  = document.getElementById('modalPass');
@@ -55,7 +54,6 @@ $(function () {
 
   const fmtDate = s => s ? new Date(s.replace(' ', 'T')).toLocaleDateString('ro-RO') : '–';
 
-  /* ---------------- DataTable ---------------- */
   const dt = $('#tbl').DataTable({
     ajax: {
       url: API + '?action=list',
@@ -135,7 +133,6 @@ $(function () {
   }
   dt.on('xhr', () => setTimeout(() => stats(dt), 0));
 
-  /* ---------------- filtre ---------------- */
   $('#fGroup').on('change', function () {
     dt.column(4).search(this.value ? '^' + escRe(this.value) + '$' : '', true, false).draw();
   });
@@ -143,7 +140,6 @@ $(function () {
     dt.column(6).search(this.value ? '^' + this.value + '$' : '', true, false).draw();
   });
 
-  /* ---------------- lookups ---------------- */
   $.getJSON(API + '?action=lookups', d => {
     if (!d || !d.ok) return;
     d.groups.forEach(g => {
@@ -153,7 +149,6 @@ $(function () {
     d.langs.forEach(l => $('#fLang').append(new Option(l, l)));
   });
 
-  /* ---------------- selecție ---------------- */
   function refreshSel() {
     $('#selCount').text(selected.size);
     $('#btnBulkDelete').prop('disabled', selected.size === 0);
@@ -174,8 +169,7 @@ $(function () {
     $('#tbl tbody .rowChk').each(function () { this.checked = selected.has(this.value); });
     refreshSel();
   });
-
-  /* ---------------- ADAUGĂ ---------------- */
+  
   $('#btnAdd').on('click', function () {
     $('#frm')[0].reset();
     $('#fAction').val('create');
@@ -193,7 +187,7 @@ $(function () {
     setTimeout(() => $('#fUser').trigger('focus'), 50);
   });
 
-  /* ---------------- MODIFICĂ ---------------- */
+  
   $('#tbl tbody').on('click', '.btnEdit', function () {
     const id = $(this).data('id');
     $.getJSON(API + '?action=get&id=' + encodeURIComponent(id), d => {
@@ -228,7 +222,6 @@ $(function () {
     }).fail(() => notify('Nu s-au putut încărca datele.', 'danger'));
   });
 
-  /* ---------------- SALVEAZĂ ---------------- */
   $('#frm').on('submit', function (ev) {
     ev.preventDefault();
     if (!this.checkValidity()) { this.reportValidity(); return; }
@@ -250,7 +243,6 @@ $(function () {
       });
   });
 
-  /* ---------------- RESETARE PAROLĂ ---------------- */
   $('#tbl tbody').on('click', '.btnPass', function () {
     const id  = $(this).data('id');
     const row = dt.rows().data().toArray().find(r => +r.UserID === +id);
@@ -275,7 +267,6 @@ $(function () {
       .always(() => $('#btnPassSave').prop('disabled', false).removeClass('loading'));
   });
 
-  /* ---------------- acțiuni rapide ---------------- */
   function post(data, after) {
     data.csrf = $('input[name=csrf]').first().val();
     $.post(API, data, null, 'json')
