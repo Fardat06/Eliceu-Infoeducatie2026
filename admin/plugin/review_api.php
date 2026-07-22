@@ -1,12 +1,11 @@
 <?php
-// admin/plugin/review_api.php — moderare recenzii (home_review) + suspendare conturi
 ob_start();
 require_once __DIR__ . '/admin_init.php';
 if (ob_get_length()) { ob_clean(); }
 
 /** @var PDO $con */
 $T  = DB_PREFIX . 'review';
-$TU = DB_PREFIX . 'user_details';   // conturile vizitatorilor care scriu recenzii
+$TU = DB_PREFIX . 'user_details';
 $TL = DB_PREFIX . 'numa_liceu';
 
 $action = $_REQUEST['action'] ?? '';
@@ -24,7 +23,6 @@ if (in_array($action, $writeActions, true)) {
 function p($k, $d = '')   { return trim((string)($_POST[$k] ?? $d)); }
 function pInt($k, $d = 0) { return (int)($_POST[$k] ?? $d); }
 
-/** ID-uri valide dintr-un array POST. */
 function idList(string $key): array
 {
     $v = $_POST[$key] ?? [];
@@ -45,9 +43,7 @@ $hasUsers = tableExists($con, $TU);
 try {
     switch ($action) {
 
-        /* ---------------- LISTĂ ---------------- */
         case 'list':
-            // JOIN cu liceul (id) și cu autorul (dacă tabelul există)
             if ($hasUsers) {
                 $sql = "SELECT r.id, r.id_numa_liceu, r.user_id, r.rating, r.comment,
                                r.created_at, r.is_active,
@@ -73,7 +69,6 @@ try {
             json_out(['data' => $con->query($sql)->fetchAll(PDO::FETCH_ASSOC),
                       'has_users' => $hasUsers]);
 
-        /* ---------------- CITEȘTE O RECENZIE ---------------- */
         case 'get':
             $id = (int)($_GET['id'] ?? 0);
             $join = $hasUsers
@@ -94,7 +89,6 @@ try {
             $row = $st->fetch(PDO::FETCH_ASSOC);
             if (!$row) json_out(['ok' => false, 'msg' => 'Recenzia nu a fost găsită.'], 404);
 
-            // celelalte recenzii ale aceluiași autor — context pentru moderare
             $st = $con->prepare("
                 SELECT r.id, r.rating, r.comment, r.is_active, r.created_at, l.name AS liceu
                 FROM `$T` r
@@ -107,7 +101,6 @@ try {
 
             json_out(['ok' => true, 'row' => $row]);
 
-        /* ---------------- PUBLICĂ / RETRAGE ---------------- */
         case 'publish':
         case 'unpublish':
             $id = pInt('id');
@@ -135,7 +128,6 @@ try {
             json_out(['ok' => true,
                       'msg' => $st->rowCount() . ($val ? ' recenzii publicate.' : ' recenzii retrase.')]);
 
-        /* ---------------- ȘTERGE ---------------- */
         case 'delete':
             $id = pInt('id');
             if (!$id) json_out(['ok' => false, 'msg' => 'ID lipsă.'], 400);
@@ -154,7 +146,6 @@ try {
             $st->execute($ids);
             json_out(['ok' => true, 'msg' => $st->rowCount() . ' recenzii șterse.']);
 
-        /* ---------------- SUSPENDĂ AUTORUL ---------------- */
         case 'suspend_user':
             if (!$hasUsers) json_out(['ok' => false, 'msg' => 'Tabelul de utilizatori nu este disponibil.'], 400);
 
@@ -182,7 +173,6 @@ try {
             if ($ascunse) $msg .= ' ' . $ascunse . ' recenzie(i) retrase de pe site.';
             json_out(['ok' => true, 'msg' => $msg]);
 
-        /* ---------------- REACTIVEAZĂ AUTORUL ---------------- */
         case 'reactivate_user':
             if (!$hasUsers) json_out(['ok' => false, 'msg' => 'Tabelul de utilizatori nu este disponibil.'], 400);
 
@@ -200,7 +190,6 @@ try {
             json_out(['ok' => true,
                       'msg' => 'Contul „' . $uname . '” a fost reactivat. Recenziile rămân retrase până le publici.']);
 
-        /* ---------------- listă licee pentru filtru ---------------- */
         case 'lookups':
             $licee = $con->query("
                 SELECT DISTINCT l.name
