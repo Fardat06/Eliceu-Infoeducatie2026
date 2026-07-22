@@ -58,7 +58,6 @@ include __DIR__ . '/template/header.php';
   <h1>Broșură admitere București → Excel / MySQL</h1>
   <p class="sub">Extrage date din broșura PDF, direct în browser.</p>
 
-  <!-- ── MODE TOGGLE ── -->
   <div class="modebar">
     <label><input type="radio" name="mode" value="admitere" checked>
       Admitere 2026 <small style="color:#6b7280;font-weight:400">(specializări, medii, codificări)</small>
@@ -82,7 +81,6 @@ include __DIR__ . '/template/header.php';
   <div class="bar" id="bar"><div></div></div>
   <div class="status" id="status"></div>
 
-  <!-- admitere-only: name-fix UI -->
   <div id="fixWrap" style="display:none;margin-top:18px;">
     <h2 class="fix-h">Școli fără nume — completează înainte de import</h2>
     <div id="fixList" class="fix-list"></div>
@@ -103,9 +101,6 @@ include __DIR__ . '/template/header.php';
 <script>
 pdfjsLib.GlobalWorkerOptions.workerSrc = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
 
-/* =========================================================
- *  SHARED STATE
- * ========================================================= */
 let rows    = [];   // ADMITERE: array of arrays  |  SCHOOLS: array of objects
 let pdfFile = null;
 let mode    = 'admitere';
@@ -113,7 +108,6 @@ let mode    = 'admitere';
 const $ = id => document.getElementById(id);
 const drop = $('drop'), fileInput = $('file');
 
-/* ─── mode toggle ─── */
 document.querySelectorAll('input[name=mode]').forEach(r => {
   r.onchange = () => {
     mode = r.value;
@@ -128,7 +122,6 @@ document.querySelectorAll('input[name=mode]').forEach(r => {
   };
 });
 
-/* ─── file picker ─── */
 drop.onclick = () => fileInput.click();
 drop.ondragover  = e => { e.preventDefault(); drop.classList.add('over'); };
 drop.ondragleave = ()=> drop.classList.remove('over');
@@ -146,9 +139,6 @@ function setFile(f) {
   $('save').disabled     = true;
 }
 
-/* =========================================================
- *  MODE 1 — ADMITERE (specializări, codificări) — original
- * ========================================================= */
 function colOf(x){
   if(x<55)  return 'nr';
   if(x<248) return 'name';
@@ -290,11 +280,6 @@ function renderPreviewAdmitere(){
   $('previewWrap').style.display = 'block';
 }
 
-/* =========================================================
- *  MODE 2 — SCHOOL LIST (rețeaua unităților)
- *  Landscape pages: Nr | Unitate | Adresa | Telefon | Puncte reper
- *  Rows grouped under SECTOR N headers.
- * ========================================================= */
 const HEADERS_SCH = ["Nr","Tip scoala","Nume scoala","Adresa","Telefon","Puncte de reper","Sector"];
 
 function colOfSchool(x){
@@ -326,18 +311,15 @@ function parsePageSchools(items, pageWidth, pageHeight, state){
   })).filter(w => w.text.trim() !== '');
   if (!ws.length) return [];
 
-  // Only process school-list pages
   const flat = ws.map(w=>w.text).join(' ');
   if (!/Unitatea de învă[țţ]ăm[âa]nt/i.test(flat) && !/LICEAL - DIN MUNICIPIUL/i.test(flat)) return [];
 
-  // Strip page-number tokens (bare digits near bottom-center)
   ws = ws.filter(w => !(
     /^\d+$/.test(w.text.trim())
     && w.top > pageHeight - 70
     && Math.abs(w.x - pageWidth/2) < 60
   ));
 
-  // Detect SECTOR markers
   const sectors = [], sectorIds = new Set();
   ws.forEach(w => {
     const t = w.text.trim();
@@ -358,7 +340,6 @@ function parsePageSchools(items, pageWidth, pageHeight, state){
   });
   sectors.sort((a,b) => a.top-b.top);
 
-  // Row anchors: "Nr." column tokens like "1.", "2."
   const anchors = ws
     .filter(w => w.x < 85 && /^\d+\.$/.test(w.text.trim()))
     .map(w => ({top: w.top, nr: parseInt(w.text), id: w.id}))
@@ -370,7 +351,6 @@ function parsePageSchools(items, pageWidth, pageHeight, state){
   }
   const anchorIds = new Set(anchors.map(a => a.id));
 
-  // Row-boundary: widest vertical gap in content between consecutive anchors
   const contentTops = [...new Set(
     ws.filter(w => !sectorIds.has(w.id) && !anchorIds.has(w.id)).map(w => w.top)
   )].sort((a,b) => a-b);
@@ -455,7 +435,6 @@ function renderPreviewSchools(){
   }).join('');
   $('previewWrap').style.display='block';
 
-  // Live-update rows[] when the user edits tip or nume inline
   $('preview').querySelector('tbody').addEventListener('input', e => {
     const idx = parseInt(e.target.dataset.idx, 10);
     if (isNaN(idx)) return;
@@ -469,12 +448,6 @@ function renderPreviewSchools(){
   });
 }
 
-/* =========================================================
- *  SCHOOL FIX UI — mirrors the admitere name-fix panel.
- *  Shows one fix-row per school whose _nume is empty after
- *  splitSchool(). The left input lets you correct tip_scoala;
- *  the right input is where you fill in the missing name.
- * ========================================================= */
 function renderSchoolFixes(){
   // pre-split every row so _tip/_nume are initialised
   rows.forEach(r => {
@@ -492,7 +465,6 @@ function renderSchoolFixes(){
       `</div>`;
   }).join('');
 
-  // When user fills in a name, update rows[] and refresh that preview row
   list.querySelectorAll('.fix-row').forEach(row => {
     const nr = parseInt(row.dataset.nr, 10);
     const rec = rows.find(r => r.nr === nr);
@@ -505,9 +477,7 @@ function renderSchoolFixes(){
     row.querySelector('.fix-sch-nume').addEventListener('input', e => {
       rec._nume = e.target.value;
       syncPreviewRow(nr);
-      // hide this fix-row once a name is entered
       row.style.display = e.target.value.trim() ? 'none' : '';
-      // hide the whole panel when all are filled
       if ([...list.querySelectorAll('.fix-row')].every(r=>r.style.display==='none'))
         wrap.style.display='none';
     });
@@ -515,8 +485,6 @@ function renderSchoolFixes(){
 
   wrap.style.display = 'block';
 }
-
-// Sync an edited _tip/_nume back into the visible preview table row
 function syncPreviewRow(nr){
   const tr = $('preview').querySelector(`tr[data-nr="${nr}"]`);
   if (!tr) return;
@@ -530,9 +498,6 @@ function syncPreviewRow(nr){
                tr.style.background = rec._nume.trim() ? '' : '#fff7f0'; }
 }
 
-/* =========================================================
- *  CONVERT (mode-aware)
- * ========================================================= */
 $('convert').onclick = async () => {
   if (!pdfFile) return;
   rows = [];
@@ -576,9 +541,6 @@ $('convert').onclick = async () => {
   $('convert').disabled  = false;
 };
 
-/* =========================================================
- *  DOWNLOAD EXCEL (mode-aware)
- * ========================================================= */
 $('download').onclick = () => {
   if (mode === 'admitere'){
     const aoa = [HEADERS_ADM];
@@ -596,7 +558,6 @@ $('download').onclick = () => {
   } else {
     const aoa = [HEADERS_SCH];
     rows.forEach(r => {
-      // use edited values if user changed them in the preview table
       const tip  = (r._tip  !== undefined) ? r._tip  : splitSchool(r.nume_scoala)[0];
       const nume = (r._nume !== undefined) ? r._nume : splitSchool(r.nume_scoala)[1];
       aoa.push([r.nr, tip, nume, r.adresa, r.telefon, r.puncte_reper, r.sector]);
@@ -610,9 +571,6 @@ $('download').onclick = () => {
   }
 };
 
-/* =========================================================
- *  SAVE TO MYSQL (mode-aware endpoint + payload)
- * ========================================================= */
 $('save').onclick = async () => {
   if (!rows.length) return;
   $('save').disabled = true;
@@ -622,7 +580,6 @@ $('save').onclick = async () => {
     const payload  = mode==='admitere'
       ? applyNameFixes(buildRecords())
       : rows.map(r => {
-          // use values edited by the user in the preview table
           const tip  = (r._tip  !== undefined) ? r._tip  : splitSchool(r.nume_scoala)[0];
           const nume = (r._nume !== undefined) ? r._nume : splitSchool(r.nume_scoala)[1];
           return { ...r, tip_scoala: tip, nume_scoala: nume };
