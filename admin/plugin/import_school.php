@@ -1,14 +1,9 @@
 <?php
-/*
- * import_school.php
- * Receives rows from pdftoexecl.php (JSON: { rows: [ {…7 fields…} ] })
- * and upserts them into home_licee keyed on `nume_scoala`.
- * Fields: nr, tip_scoala, nume_scoala, adresa, telefon, puncte_reper, sector
- */
+
 header('Content-Type: application/json; charset=utf-8');
 ini_set('display_errors', '0');
 global $con;
-include 'plugin/init.php';   // provides $con (PDO) and DB_PREFIX
+include 'plugin/init.php';   
 
 function respond($d, $c = 200) { http_response_code($c); echo json_encode($d); exit; }
 
@@ -19,7 +14,6 @@ if (!is_array($input) || empty($input['rows']) || !is_array($input['rows'])) {
 $rows  = $input['rows'];
 $table = DB_PREFIX . 'licee';
 
-// value cleaners
 $intOrNull = function ($v) {
     if ($v === '' || $v === null) return null;
     return is_numeric($v) ? (int) $v : null;
