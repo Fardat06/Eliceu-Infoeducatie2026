@@ -116,7 +116,6 @@ include __DIR__ . '/template/header.php';
   </main>
 </div>
 
-<!-- ============ modal utilizator ============ -->
 <div class="modal-overlay" id="modalForm" hidden>
   <div class="modal-box">
     <form id="frm" novalidate autocomplete="off">
@@ -223,7 +222,6 @@ include __DIR__ . '/template/header.php';
   </div>
 </div>
 
-<!-- ============ modal resetare parolă ============ -->
 <div class="modal-overlay" id="modalPass" hidden>
   <div class="modal-box" style="max-width:480px">
     <form id="frmPass" novalidate autocomplete="off">
