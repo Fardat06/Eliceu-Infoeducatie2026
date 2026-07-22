@@ -1,4 +1,3 @@
-// DOM Elements
 const dashboardSidebar = document.getElementById("dashboardSidebar");
 const userMenu = document.getElementById("userMenu");
 const userMenuTrigger = document.getElementById("user-menu-trigger");
@@ -12,12 +11,9 @@ const searchContainer = document.getElementById("searchContainer");
 const searchInput = document.getElementById("searchInput");
 const searchClose = document.getElementById("searchClose");
 const mobileSearchBtn = document.getElementById("mobileSearchBtn");
-// State
 let sidebarCollapsed = false;
 let currentView = "overview";
-// ===================================
-// INITIALIZATION
-// ===================================
+
 document.addEventListener("DOMContentLoaded", function () {
   initTheme();
   initThemeToggle();
@@ -27,25 +23,19 @@ document.addEventListener("DOMContentLoaded", function () {
   initSearch();
   initCharts();
 });
-// ===================================
-// SIDEBAR FUNCTIONALITY
-// ===================================
+
 function initSidebar() {
-  // Load saved sidebar state
   sidebarCollapsed = localStorage.getItem("dashboard-sidebar-collapsed") === "true";
   dashboardSidebar.classList.toggle("collapsed", sidebarCollapsed);
-  // Sidebar toggle functionality
   document.querySelectorAll(".dashboard-sidebar-toggle").forEach((toggle) => {
     toggle.addEventListener("click", toggleSidebar);
   });
-  // Sidebar overlay functionality
   dashboardSidebarOverlay?.addEventListener("click", closeSidebar);
 }
 function toggleSidebar() {
   sidebarCollapsed = !sidebarCollapsed;
   const isMobile = window.innerWidth <= 1024;
   if (isMobile) {
-    // Mobile behavior - toggle sidebar and overlay together
     const isOpen = dashboardSidebar.classList.contains("collapsed");
     dashboardSidebar.classList.toggle("collapsed", !isOpen);
     dashboardSidebarOverlay?.classList.toggle("active", !isOpen);
@@ -61,17 +51,12 @@ function closeSidebar() {
     dashboardSidebarOverlay?.classList.remove("active");
   }
 }
-
-// ===================================
-// USER MENU FUNCTIONALITY
-// ===================================
 function initUserMenu() {
   if (!userMenuTrigger || !userMenu) return;
   userMenuTrigger.addEventListener("click", (e) => {
     e.stopPropagation();
     userMenu.classList.toggle("active");
   });
-  // Close menu when clicking outside or pressing escape
   document.addEventListener("click", (e) => {
     if (!userMenu.contains(e.target)) {
       userMenu.classList.remove("active");
@@ -83,14 +68,9 @@ function initUserMenu() {
     }
   });
 }
-// ===================================
-// THEME FUNCTIONALITY
-// ===================================
 function initTheme() {
-  // Load saved theme
   const savedTheme = localStorage.getItem("dashboard-theme") || "light";
   document.documentElement.setAttribute("data-theme", savedTheme);
-  // Update theme toggle UI
   updateThemeToggleUI(savedTheme);
 }
 function initThemeToggle() {
@@ -114,16 +94,11 @@ function updateThemeToggleUI(theme) {
   });
 }
 
-// ===================================  
-// NAVIGATION FUNCTIONALITY SearchFunction
-// ===================================
     function SearchFunction()
     {
       alert('ok');
     var serch = document.getElementById('myInputSearch').value;
     alert(serch);
-//    var order = document.getElementbyId('LastName').value;
- //   var URL="high_school.php?serch="+serch+"&order="+Lastname;
     var URL="high_school.php?search="+serch;
     window.location.href= URL;
 }
