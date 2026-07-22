@@ -449,7 +449,6 @@ function renderPreviewSchools(){
 }
 
 function renderSchoolFixes(){
-  // pre-split every row so _tip/_nume are initialised
   rows.forEach(r => {
     if (r._tip  === undefined){ const [t,n]=splitSchool(r.nume_scoala); r._tip=t; r._nume=n; }
   });
