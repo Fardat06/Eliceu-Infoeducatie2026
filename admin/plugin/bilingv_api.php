@@ -1,5 +1,4 @@
 <?php
-// admin/plugin/bilingv_api.php — CRUD pentru home_bilingv_a (cheie = id)
 ob_start();
 require_once __DIR__ . '/admin_init.php';
 if (ob_get_length()) { ob_clean(); }
@@ -7,7 +6,6 @@ if (ob_get_length()) { ob_clean(); }
 /** @var PDO $con */
 $T = DB_PREFIX . 'bilingv_a';
 
-// tabele care stochează valoarea bilingv ca text
 $REFS = [
     DB_PREFIX . 'liceu'   => 'bilingv',
     DB_PREFIX . 'medie'   => 'bilingv',
@@ -35,10 +33,7 @@ function tableExists(PDO $con, string $t): bool {
     }
 }
 
-/**
- * Numără utilizările. Rândurile goale nu se contorizează —
- * altfel „” ar părea folosit de mii de licee non-bilingve.
- */
+
 function countUsage(PDO $con, array $refs, ?string $desc): int {
     $desc = trim((string)$desc);
     if ($desc === '') return 0;
@@ -71,7 +66,6 @@ function usageBreakdown(PDO $con, array $refs, ?string $desc): array {
 try {
     switch ($action) {
 
-        /* ---------------- LISTĂ ---------------- */
         case 'list':
             $rows = $con->query("
                 SELECT id_bilingv, COALESCE(description, '') AS description
@@ -86,7 +80,6 @@ try {
             unset($r);
             json_out(['data' => $rows]);
 
-        /* ---------------- CITEȘTE ---------------- */
         case 'get':
             $id = (int)($_GET['id'] ?? 0);
             $st = $con->prepare("
@@ -99,8 +92,7 @@ try {
 
             $row['usage'] = usageBreakdown($con, $REFS, $row['description']);
             json_out(['ok' => true, 'row' => $row]);
-
-        /* ---------------- ADAUGĂ ---------------- */
+        
         case 'create':
             $desc = p('description');
             if ($desc === '')           json_out(['ok' => false, 'msg' => 'Denumirea este obligatorie.'], 422);
@@ -115,7 +107,6 @@ try {
             $st->execute([$desc]);
             json_out(['ok' => true, 'msg' => 'Valoarea „' . $desc . '” a fost adăugată.']);
 
-        /* ---------------- MODIFICĂ ---------------- */
         case 'update':
             $id   = (int)p('id_bilingv');
             $desc = p('description');
@@ -135,7 +126,7 @@ try {
             $st = $con->prepare("UPDATE `$T` SET description = ? WHERE id_bilingv = ?");
             $st->execute([$desc, $id]);
 
-            // propagăm doar dacă vechea valoare nu era goală
+
             $afectate = 0;
             $detaliu  = [];
             if (trim($old) !== '' && $old !== $desc) {
@@ -154,7 +145,6 @@ try {
             if ($afectate) $msg .= ' Actualizate: ' . implode(', ', $detaliu) . '.';
             json_out(['ok' => true, 'msg' => $msg]);
 
-        /* ---------------- ȘTERGE ---------------- */
         case 'delete':
             $id = (int)p('id_bilingv');
             if (!$id) json_out(['ok' => false, 'msg' => 'ID lipsă.'], 400);
@@ -174,7 +164,6 @@ try {
             $st->execute([$id]);
             json_out(['ok' => true, 'msg' => 'Înregistrarea a fost ștearsă.']);
 
-        /* ---------------- ȘTERGERE MULTIPLĂ ---------------- */
         case 'bulk_delete':
             $ids = $_POST['ids'] ?? [];
             if (!is_array($ids) || !$ids) json_out(['ok' => false, 'msg' => 'Nicio selecție.'], 400);
@@ -203,7 +192,6 @@ try {
             if ($blocate) $msg .= ' Nu s-au putut șterge (în uz): ' . implode(', ', $blocate) . '.';
             json_out(['ok' => true, 'msg' => $msg]);
 
-        /* ---------------- CURĂȚĂ RÂNDURILE GOALE ---------------- */
         case 'clean_empty':
             if ($_SERVER['REQUEST_METHOD'] !== 'POST' || !csrf_check($_POST['csrf'] ?? '')) {
                 json_out(['ok' => false, 'msg' => 'Token CSRF invalid.'], 403);
