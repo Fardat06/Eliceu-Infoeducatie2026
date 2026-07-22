@@ -1,10 +1,8 @@
 <?php
-// admin/plugin/users_api.php — CRUD pentru home_users (conturi de administrare)
 ob_start();
 require_once __DIR__ . '/admin_init.php';
 if (ob_get_length()) { ob_clean(); }
 
-/** @var PDO $con */
 $T = DB_PREFIX . 'users';
 
 $action = $_REQUEST['action'] ?? '';
@@ -15,8 +13,6 @@ if (in_array($action, $writeActions, true)) {
         json_out(['ok' => false, 'msg' => 'Token CSRF invalid. Reîncarcă pagina.'], 403);
     }
 }
-
-/* ID-ul contului curent — nu îl lăsăm să se auto-distrugă */
 function currentUserId(PDO $con): int
 {
     if (!empty($_SESSION['UserID'])) return (int)$_SESSION['UserID'];
@@ -31,7 +27,6 @@ function currentUserId(PDO $con): int
 function p($k, $d = '')   { return trim((string)($_POST[$k] ?? $d)); }
 function pInt($k, $d = 0) { return (int)($_POST[$k] ?? $d); }
 
-/** Grupuri de utilizatori. Ajustează dacă folosești altă convenție. */
 function groupName(int $g): string
 {
     $map = [0 => 'Utilizator', 1 => 'Editor', 2 => 'Administrator', 9 => 'Super-admin'];
@@ -64,7 +59,6 @@ function validate(array $f, bool $isNew, ?string $pass): array
 try {
     switch ($action) {
 
-        /* ---------------- LISTĂ ---------------- */
         case 'list':
             $rows = $con->query("
                 SELECT UserID, UserName, FullName, Email, Language,
@@ -81,7 +75,6 @@ try {
 
             json_out(['data' => $rows, 'me' => currentUserId($con)]);
 
-        /* ---------------- CITEȘTE ---------------- */
         case 'get':
             $id = (int)($_GET['id'] ?? 0);
             $st = $con->prepare("
@@ -95,7 +88,6 @@ try {
             if (!$row) json_out(['ok' => false, 'msg' => 'Utilizatorul nu a fost găsit.'], 404);
             json_out(['ok' => true, 'row' => $row]);
 
-        /* ---------------- ADAUGĂ ---------------- */
         case 'create':
             $f = [
                 'UserName'    => p('UserName'),
@@ -134,8 +126,7 @@ try {
             $con->prepare($sql)->execute($params);
 
             json_out(['ok' => true, 'msg' => 'Utilizatorul „' . $f['UserName'] . '” a fost creat.']);
-
-        /* ---------------- MODIFICĂ ---------------- */
+        
         case 'update':
             $id = pInt('UserID');
             if (!$id) json_out(['ok' => false, 'msg' => 'ID lipsă.'], 400);
@@ -152,7 +143,7 @@ try {
                 'last_name'   => p('last_name'),
                 'stopx'       => pInt('stopx') ? 1 : 0,
             ];
-            $pass = p('Password');   // gol = nu se schimbă
+            $pass = p('Password');  
 
             $err = validate($f, false, $pass === '' ? null : $pass);
             if ($err) json_out(['ok' => false, 'msg' => implode(' ', $err)], 422);
@@ -172,7 +163,6 @@ try {
             }
 
             $me = currentUserId($con);
-            // nu îți poți retrage singur drepturile sau dezactiva propriul cont
             if ($id === $me) {
                 $f['stopx']     = 0;
                 $f['GroupID']   = (int)$con->query("SELECT GroupID FROM `$T` WHERE UserID = $me")->fetchColumn();
@@ -198,7 +188,6 @@ try {
             if ($id === $me)  $msg .= ' Grupul și starea propriului cont nu pot fi modificate.';
             json_out(['ok' => true, 'msg' => $msg]);
 
-        /* ---------------- RESETARE PAROLĂ ---------------- */
         case 'reset_password':
             $id   = pInt('UserID');
             $pass = p('Password');
@@ -210,7 +199,6 @@ try {
             $st->execute([password_hash($pass, PASSWORD_DEFAULT), currentUserId($con), $id]);
             json_out(['ok' => (bool)$st->rowCount(), 'msg' => 'Parola a fost resetată.']);
 
-        /* ---------------- ACTIVEAZĂ / DEZACTIVEAZĂ ---------------- */
         case 'toggle_stop':
             $id = pInt('UserID');
             if (!$id) json_out(['ok' => false, 'msg' => 'ID lipsă.'], 400);
@@ -221,7 +209,6 @@ try {
             $st->execute([$id]);
             json_out(['ok' => true, 'msg' => 'Starea contului a fost actualizată.']);
 
-        /* ---------------- ȘTERGE ---------------- */
         case 'delete':
             $id = pInt('UserID');
             if (!$id) json_out(['ok' => false, 'msg' => 'ID lipsă.'], 400);
@@ -229,7 +216,6 @@ try {
                 json_out(['ok' => false, 'msg' => 'Nu îți poți șterge propriul cont.'], 403);
             }
 
-            // nu rămânem fără niciun administrator activ
             $admini = (int)$con->query("SELECT COUNT(*) FROM `$T` WHERE GroupID >= 2 AND stopx = 0")->fetchColumn();
             $st = $con->prepare("SELECT GroupID, stopx FROM `$T` WHERE UserID = ? LIMIT 1");
             $st->execute([$id]);
@@ -245,7 +231,6 @@ try {
                 'msg' => $st->rowCount() ? 'Utilizatorul a fost șters.' : 'Nu s-a șters nimic.',
             ]);
 
-        /* ---------------- ȘTERGERE MULTIPLĂ ---------------- */
         case 'bulk_delete':
             $ids = $_POST['ids'] ?? [];
             if (!is_array($ids) || !$ids) json_out(['ok' => false, 'msg' => 'Nicio selecție.'], 400);
@@ -262,7 +247,6 @@ try {
             $msg = $st->rowCount() . ' utilizator(i) șterși.';
             json_out(['ok' => true, 'msg' => $msg]);
 
-        /* ---------------- grupuri pentru selector ---------------- */
         case 'lookups':
             $groups = [];
             foreach ([0, 1, 2, 9] as $g) $groups[] = ['id' => $g, 'name' => groupName($g)];
