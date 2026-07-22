@@ -60,7 +60,6 @@ function usageBreakdown(PDO $con, array $refs, string $desc): array {
 try {
     switch ($action) {
 
-        /* ---------------- LISTĂ ---------------- */
         case 'list':
             $rows = $con->query("SELECT id_specializare, description FROM `$T` ORDER BY description ASC")
                         ->fetchAll(PDO::FETCH_ASSOC);
@@ -70,7 +69,6 @@ try {
             unset($r);
             json_out(['data' => $rows]);
 
-        /* ---------------- CITEȘTE ---------------- */
         case 'get':
             $id = (int)($_GET['id'] ?? 0);
             $st = $con->prepare("SELECT * FROM `$T` WHERE id_specializare = ? LIMIT 1");
@@ -81,7 +79,6 @@ try {
             $row['usage'] = usageBreakdown($con, $REFS, $row['description']);
             json_out(['ok' => true, 'row' => $row]);
 
-        /* ---------------- ADAUGĂ ---------------- */
         case 'create':
             $desc = p('description');
             if ($desc === '')           json_out(['ok' => false, 'msg' => 'Denumirea este obligatorie.'], 422);
@@ -95,8 +92,6 @@ try {
             $st->execute([$desc]);
             json_out(['ok' => true, 'msg' => 'Specializarea „' . $desc . '” a fost adăugată.']);
 
-        /* ---------------- MODIFICĂ ---------------- */
-/* ---------------- MODIFICĂ ---------------- */
         case 'update':
             $id   = (int)p('id_specializare');
             $desc = p('description');
@@ -105,24 +100,20 @@ try {
             if ($desc === '')           json_out(['ok' => false, 'msg' => 'Denumirea este obligatorie.'], 422);
             if (mb_strlen($desc) > 250) json_out(['ok' => false, 'msg' => 'Denumirea depășește 250 de caractere.'], 422);
 
-            // valoarea veche, necesară pentru propagare
             $st = $con->prepare("SELECT description FROM `$T` WHERE id_specializare = ? LIMIT 1");
             $st->execute([$id]);
             $old = $st->fetchColumn();
             if ($old === false) json_out(['ok' => false, 'msg' => 'Specializarea nu mai există.'], 404);
 
-            // denumire duplicată la alt id?
             $st = $con->prepare("SELECT 1 FROM `$T` WHERE description = ? AND id_specializare <> ? LIMIT 1");
             $st->execute([$desc, $id]);
             if ($st->fetch()) json_out(['ok' => false, 'msg' => 'Această denumire este deja folosită.'], 409);
 
             $con->beginTransaction();
             try {
-                // 1. tabelul de referință
                 $con->prepare("UPDATE `$T` SET description = ? WHERE id_specializare = ?")
                     ->execute([$desc, $id]);
 
-                // 2. propagăm în tabelele care stochează specializarea ca text
                 $afectate = 0;
                 $detaliu  = [];
 
@@ -152,7 +143,6 @@ try {
             }
             json_out(['ok' => true, 'msg' => $msg]);
             
-        /* ---------------- ȘTERGE ---------------- */
         case 'delete':
             $id = (int)p('id_specializare');
             if (!$id) json_out(['ok' => false, 'msg' => 'ID lipsă.'], 400);
@@ -172,7 +162,6 @@ try {
             $st->execute([$id]);
             json_out(['ok' => true, 'msg' => 'Specializarea a fost ștearsă.']);
 
-        /* ---------------- ȘTERGERE MULTIPLĂ ---------------- */
         case 'bulk_delete':
             $ids = $_POST['ids'] ?? [];
             if (!is_array($ids) || !$ids) json_out(['ok' => false, 'msg' => 'Nicio selecție.'], 400);
