@@ -60,8 +60,8 @@ include 'template/header.php';
               <h3>Top 3 facultăți</h3>
               <ul>
                 <li>Automatică și Calculatoare</li>
-                <li>Informatică</li>
-                <li>Politehnică</li>
+                <li>Informatică (UNIBUC)</li>
+                <li>Matematică (UNIBUC)</li>
               </ul>
             </div>
           </div>
