@@ -13,7 +13,7 @@ if (isset($_SESSION['LAST_ACTIVITY']) && (time() - $_SESSION['LAST_ACTIVITY'] > 
         $Language = $_SESSION['Language'] . '.php';
         $langFile =  'languages' . $Language;
     } else {
-        $langFile = __DIR__ . '/languages/en.php';
+       // $langFile = __DIR__ . '/languages/en.php';
     }
 
     if (file_exists($langFile)) {
